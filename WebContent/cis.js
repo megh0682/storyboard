@@ -4,63 +4,6 @@
 
 
 	var ctx, color ="#000";	
-
-	 function dataURLtoBlob(dataURL) {
-		        var BASE64_MARKER = ';base64,';
-			    if (dataURL.indexOf(BASE64_MARKER) == -1) {
-			      var parts = dataURL.split(',');
-			      var contentType = parts[0].split(':')[1];
-			      var raw = decodeURIComponent(parts[1]);
-
-			      return new Blob([raw], {type: contentType});
-			    }
-
-			    var parts = dataURL.split(BASE64_MARKER);
-			    var contentType = parts[0].split(':')[1];
-			    var raw = window.atob(parts[1]);
-			    var rawLength = raw.length;
-
-			    var uInt8Array = new Uint8Array(rawLength);
-
-			    for (var i = 0; i < rawLength; ++i) {
-			      uInt8Array[i] = raw.charCodeAt(i);
-			    }
-
-			    return new Blob([uInt8Array], {type: contentType});
-		 }
-	/**************************************************/
-	  
-	 function uploadcanvas(){
-		 var canvas = document.getElementById('canvas');
-		 var dataURL = canvas.toDataURL();
-		 console.log(dataURL);
-		 //alert(dataURL);
-		 
-		 $.ajax({
-			  type: "POST",
-			  url: "uploadcanvas",
-			  data: {contents: dataURL,}
-			}).done(function(o) {
-			  console.log('saved'); 
-			  // If you want the file to be visible in the browser 
-			  // - please modify the callback in javascript. All you
-			  // need is to return the url to the file, you just saved 
-			  // and than put the image in your browser.
-			});
-		 	 	  
-	 }
-	
-		/**************************************************/
-	 
-	//document.addEventListener( "DOMContentLoaded", function(){
-		// setup a new canvas for drawing wait for device init
-	  //  setTimeout(function(){
-		//   newCanvas();
-	    //}, 1000);
-	//}, false );
-
-	
-	
 	// function to setup a new canvas for drawing
 	function newCanvas(){
 		var canvas = document.getElementById('canvas');
@@ -72,7 +15,7 @@
 	  if (canvas.getContext){
 	  ctx = canvas.getContext("2d");
 	  ctx.strokeStyle = color;
-	  ctx.lineWidth = 3;	
+	  ctx.lineWidth = 2;	
 	  ctx.beginPath();
 	  
 	   /* ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle
@@ -166,7 +109,66 @@
 		document.getElementById("canvas").addEventListener("MSPointerMove", move, false);
 	};        
 	
-	/***************************************************************************************************************/
+	/********************************************************/
+
+	 function dataURLtoBlob(dataURL) {
+		        var BASE64_MARKER = ';base64,';
+			    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+			      var parts = dataURL.split(',');
+			      var contentType = parts[0].split(':')[1];
+			      var raw = decodeURIComponent(parts[1]);
+
+			      return new Blob([raw], {type: contentType});
+			    }
+
+			    var parts = dataURL.split(BASE64_MARKER);
+			    var contentType = parts[0].split(':')[1];
+			    var raw = window.atob(parts[1]);
+			    var rawLength = raw.length;
+
+			    var uInt8Array = new Uint8Array(rawLength);
+
+			    for (var i = 0; i < rawLength; ++i) {
+			      uInt8Array[i] = raw.charCodeAt(i);
+			    }
+
+			    return new Blob([uInt8Array], {type: contentType});
+		 }
+	/**************************************************/
+	  
+	 function uploadcanvas(){
+		 var canvas = document.getElementById('canvas');
+		 var dataURL = canvas.toDataURL();
+		 console.log(dataURL);
+		 //alert(dataURL);
+		 
+		 $.ajax({
+			  type: "POST",
+			  url: "uploadcanvas",
+			  data: {contents: dataURL,}
+			}).done(function(o) {
+			  console.log('saved'); 
+			  // If you want the file to be visible in the browser 
+			  // - please modify the callback in javascript. All you
+			  // need is to return the url to the file, you just saved 
+			  // and than put the image in your browser.
+			});
+		 	 	  
+	 }
+	
+		/**************************************************/
+	 
+	//document.addEventListener( "DOMContentLoaded", function(){
+		// setup a new canvas for drawing wait for device init
+	  //  setTimeout(function(){
+		//   newCanvas();
+	    //}, 1000);
+	//}, false );
+
+	
+	
+	
+		/***************************************************************************************************************/
     function saveCanvas(){
     	var imageURL=document.getElementById("canvas").toDataURL();
     	document.getElementById("lnkcanvassave").href=imageURL;

@@ -1,17 +1,16 @@
-#canvascontent{
-    position: absolute;
-    top: 44px;
-    left: 0px;
-    right: 0px;
-    bottom: 46px;
-    overflow:hidden;
-    background-color:#ddd;
+body{
+	
+background-color:#99ccff;
+	
 }
+
 #canvas{
    	border:2px solid grey;
     cursor:crosshair ;
     background-color:#fff;
-}
+    width: 100%;
+    height: auto; 
+ }
 span {
 	margin: 5px; 
     padding: 10px; 

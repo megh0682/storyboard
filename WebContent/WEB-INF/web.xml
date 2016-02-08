@@ -2,15 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
   <servlet>
     <servlet-name>UploadImage</servlet-name>
-    <servlet-class>com.home.canvasimagesave.UploadServlet</servlet-class>
+    <servlet-class>com.home.storyboard.UploadServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>UploadCanvas</servlet-name>
-    <servlet-class>com.home.canvasimagesave.UploadCanvas</servlet-class>
+    <servlet-class>com.home.storyboard.UploadCanvas</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StoryServlet</servlet-name>
-    <servlet-class>com.home.canvasimagesave.StoryServlet</servlet-class>
+    <servlet-class>com.home.storyboard.StoryServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UploadImage</servlet-name>

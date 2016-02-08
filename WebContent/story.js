@@ -170,6 +170,35 @@
 					 });	
 				
 	/**********************************************************************/	
+				   	$("#btndownload").click(function(){
+						 alert("I m ikn btndownload");
+						 var canvas = document.getElementById('canvas');
+						 var dataURL = canvas.toDataURL();
+						 console.log(dataURL);
+						 //alert(dataURL);
+						 
+						 $.ajax({
+							  type: "POST",
+							  url: "uploadcanvas",
+							  data: {contents: dataURL},
+							  success: function(responsetext){
+									$("#endsuccess").show("slow", function() {
+										  $(this).css("color","green");
+									      $(this).text("Entered text "+responsetext+" saved successfully.");
+									    });
+									$("#endsuccess").hide("slow", function() {
+										  $(this).text("");
+									    });
+									$("#endsuccess").show(5,function() {
+										  $(this).text("");
+									    });
+								   },
+								   error: function(){
+						 			  console.log("fail") ; 
+							       },
+								 
+								});
+					});
 
 				
 				
