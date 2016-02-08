@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href = "http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css">
+<link rel="stylesheet" href="cis.css"  type="text/css">  
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src = "http://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src = "http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="cis.js"></script>
+<script type="text/javascript" src="story.js"></script>
+<title>Hello ${user}</title>
+</head>
+<body>
+
+<div class="container">
+<div class="row">
+
+<div class="col-md-4" class = "form-group">
+<h1>Hello ${user} </h1>
+<label for="fn"> First-Name: </label><input type="text" disabled class="form-control"/>
+<label for="ln"> Last-Name: </label><input type="text" disabled class="form-control"/>
+<label for="email"> Email: </label><input type="email" disabled class="form-control"/>
+<label for="profilepic"> Profile Picture: </label><img src="http://www.w3schools.com/tags/smiley.gif" alt="Smiley face" width="42" height="42"><button id="editprofile">Change Your Picture</button>
+</div>
+ <form name="myform" id="myform" method="POST" action="uploadimage" enctype="multipart/form-data" role="form" hidden="true">
+	<div class="col-md-4" class = "form-group">
+		<label for="fileinput">Upload your photo: </label>
+		<input type="file" name="file" id="file" /> 
+		<input type="submit" value="Upload" />
+	</div>
+</form>
+
+<div class="col-md-4">
+<h1>Download your stories</h1>
+<ol>
+<li>Story1.pdf</li>
+<li>Story2.pdf</li>
+<li>Story3.pdf</li>
+</ol>
+</div> 
+
+<div class="col-md-4">
+<a src="#"><h1>Create a new Story!</h1></a>
+</div> 
+
+</div>
+</div>  
+</body>
+</html>
