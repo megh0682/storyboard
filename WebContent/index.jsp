@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -14,17 +13,23 @@
 <title>Login Page</title>
 </head>
 <body>
+<div class = "page-header">
 
+   <h1 align ="center"><b> Sign in to your Storyboard </b> </h1>
+   <h2 id = "flash">${flash}</h2>
+   
+</div>
 <div class="container">
 <div class="row">
-  
+ <div style="width: 200px; margin: 100px auto 0 auto;"> 
      <form id="myname" role="form">
-	 <div class="col-md-4" class = "form-group">
+	 <div class="col-md-16" class = "form-group">
             <label for ="myname">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="text" required class="form-control"/>
             <label for ="mypasscode">Passcode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" required class="form-control"/><br><br>
-            <input type="button"  id="savename" value="Submit"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
+            <input type="button"  id="savename" value="Login"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
      </div>  
 	 </form> 
+</div>
      
  </div>
 </div>  

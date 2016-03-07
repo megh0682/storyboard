@@ -6,11 +6,12 @@
 	var ctx, color ="#000";	
 	// function to setup a new canvas for drawing
 	function newCanvas(){
-		var canvas = document.getElementById('canvas');
+		//var canvas = document.getElementById('canvas');
 	  //define and resize canvas
-	  //document.getElementById("canvascontent").style.height = window.innerHeight-90;
-	  //var canvas = '<canvas id="canvas" width="'+window.innerWidth+'" height="'+(window.innerHeight-90)+'"></canvas>';
-	  //document.getElementById("canvascontent").innerHTML = canvas;
+	  document.getElementById("canvascontent").style.height = window.innerHeight-200;
+	  document.getElementById("canvascontent").style.height = window.innerWidth-200;
+	  var canvas = '<canvas id="canvas" width="'+(window.innerWidth -200)+'" height="'+(window.innerHeight-200)+'"></canvas>';
+	  document.getElementById("canvascontent").innerHTML = canvas;
 	  // setup canvas
 	  if (canvas.getContext){
 	  ctx = canvas.getContext("2d");

@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,15 +17,20 @@
 <title>Hello ${user}</title>
 </head>
 <body>
-
+<header>
+  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+  <h1>My Story Board</h1>
+</header>
 <div class="container">
 <div class="row">
 
 <div class="col-md-4" class = "form-group">
-<h1>Hello ${user} </h1>
-<label for="fn"> First-Name: </label><input type="text" disabled class="form-control"/>
-<label for="ln"> Last-Name: </label><input type="text" disabled class="form-control"/>
-<label for="email"> Email: </label><input type="email" disabled class="form-control"/>
+<h1>Hello ${user.username}! </h1>
+<c:choose>
+<c:when test="${user ne null}">
+<label for="fn"> First-Name: </label><input type="text" disabled class="form-control" value = ${profile.firstname}>
+<label for="ln"> Last-Name: </label><input type="text" disabled class="form-control" value = ${profile.lastname}>
+<label for="email"> Email: </label><input type="email" disabled class="form-control"value = ${profile.email}>
 <label for="profilepic"> Profile Picture: </label><img src="http://www.w3schools.com/tags/smiley.gif" alt="Smiley face" width="42" height="42"><button id="editprofile">Change Your Picture</button>
 </div>
  <form name="myform" id="myform" method="POST" action="uploadimage" enctype="multipart/form-data" role="form" hidden="true">
@@ -34,19 +42,31 @@
 </form>
 
 <div class="col-md-4">
-<h1>Download your stories</h1>
+<h1>My Stories</h1>
 <ol>
-<li>Story1.pdf</li>
-<li>Story2.pdf</li>
-<li>Story3.pdf</li>
+<c:forEach var="story" items="${stories}">
+  <li><a src="#">${story.title}</a></li>    
+</c:forEach>
 </ol>
-</div> 
-
+</div>    
+         
 <div class="col-md-4">
 <a src="#"><h1>Create a new Story!</h1></a>
 </div> 
-
 </div>
-</div>  
+</div> 
+<a href="StoryServlet?action=logout">Log Out</a>
+</p>
+ </c:when>
+<c:otherwise>
+ <p><a href="StoryServlet?action=login">Log in to Storyboard</a> |
+ <a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
+ </p>
+</c:otherwise>
+</c:choose>
+ 
+<footer>
+ love reading stories & love writing stories & love sharing stories
+</footer>
 </body>
 </html>

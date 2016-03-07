@@ -2,20 +2,34 @@
  * Story content post forms using jquery ajax and validation of UI inputs.
  */
  $(document).ready(function(){
-	 
-	$("#myname input[value=Save]").click(function(){
+	alert("I am in");
+	$("#myname input[value=Login]").click(function(){
 	var name = $("#myname input[type=text]").val();
+	var password = $("#myname input[type=password]").val();
 	if(name=="")
 	  alert("Please enter your name!");
+	else if(password=="")
+      alert("Please enter your password!");
 	else
 	  $.ajax({
 		  type: "POST",
 		  url: "StoryServlet",
-		  data: {name:name},
-		  success: function(responsetext){
-			$("#namesuccess").show("slow", function() {
+		  data: {name:name, password:password},
+		  dataType: "json",
+		  success: function(json){
+			alert("Success")  
+			if (json.redirect) {
+            // data.redirect contains the string URL to redirect to
+            window.location.href = json.redirect;
+            }else{
+            // data.form contains the HTML for the replacement form
+            alert(json.error);
+            $("#myname input[type=text]").val("");	
+            }
+           
+			/*$("#namesuccess").show("slow", function() {
 				  $(this).css("color","green");
-			      $(this).text("Name "+responsetext+" saved successfully.");
+			      $(this).text("Username "+responsetext+" saved successfully.");
 			    });
 			$("#namesuccess").hide("slow", function() {
 				  $(this).text("");
@@ -23,6 +37,7 @@
 			$("#namesuccess").show(5,function() {
 				  $(this).text("");
 			    });
+			    */
 		   },
 		   error: function(){
  			  console.log("fail") ; 
@@ -199,6 +214,12 @@
 								 
 								});
 					});
+    /**********************************************************************/
+				   	
+				   	$('textarea').on('input', function() {
+				   	  $(this).outerHeight(38).outerHeight(this.scrollHeight);
+				   	});
+
 
 				
 				

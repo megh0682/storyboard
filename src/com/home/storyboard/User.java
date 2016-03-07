@@ -1,5 +1,7 @@
 package com.home.storyboard;
 
+import java.io.Serializable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -7,13 +9,14 @@ import com.j256.ormlite.table.DatabaseTable;
  * Example user object that is persisted to disk by the DAO and other example classes.
  */
 @DatabaseTable(tableName = "Users")
-public class User {
+public class User implements Serializable {
 
 // for QueryBuilder to be able to find the fields
 	public static final String NAME_FIELD_NAME = "username";
 	public static final String PASSWORD_FIELD_NAME = "password";
 	public static final String PROFILE_ID = "profileid";
-	public static final String ROW_ID = "rowid";
+
+
 	//@DatabaseField(generatedId = true)
 	//private int rowid;
 
@@ -27,7 +30,7 @@ public class User {
 	private String profileid;
 
 	@DatabaseField(generatedId = true)
-	private int id;
+	private Integer id;
 	
 	
 	User() {
@@ -43,15 +46,15 @@ public class User {
 		this.password = password;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public String getUserName() {
+	public String getUsername() {
 		return username;
 	}
 
-	public void setUserName(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 

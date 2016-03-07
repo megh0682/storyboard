@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+
   <servlet>
     <servlet-name>UploadImage</servlet-name>
     <servlet-class>com.home.storyboard.UploadServlet</servlet-class>
@@ -8,11 +9,7 @@
     <servlet-name>UploadCanvas</servlet-name>
     <servlet-class>com.home.storyboard.UploadCanvas</servlet-class>
   </servlet>
-  <servlet>
-    <servlet-name>StoryServlet</servlet-name>
-    <servlet-class>com.home.storyboard.StoryServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
+    <servlet-mapping>
     <servlet-name>UploadImage</servlet-name>
     <url-pattern>/uploadimage</url-pattern>
   </servlet-mapping>
@@ -20,11 +17,13 @@
     <servlet-name>UploadCanvas</servlet-name>
     <url-pattern>/uploadcanvas</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>StoryServlet</servlet-name>
+    <servlet-class>com.home.storyboard.StoryServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>StoryServlet</servlet-name>
     <url-pattern>/StoryServlet</url-pattern>
   </servlet-mapping>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
+
 </web-app>
