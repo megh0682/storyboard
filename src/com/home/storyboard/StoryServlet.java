@@ -19,8 +19,6 @@ public class StoryServlet extends HttpServlet {
 			
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
-		// TODO Auto-generated method stub
-	//if(sc.getAttribute("db")!=null){
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
@@ -104,4 +102,58 @@ public class StoryServlet extends HttpServlet {
 	//}
 
 }
+	
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String action = request.getParameter("action");   
+        if (action == null) action = "main";
+        switch (action) {
+            case "main": action = main(request); break;
+            case "createStory": action = createStory(request); break;
+            case "login": action = login(request); break;
+            case "logout": action = logout(request); break;
+            case "register": action = register(request); break;
+            case "profile": action = profile(request); break;
+            default: action = "main";
+        }
+        request.getRequestDispatcher(action + ".jsp").forward(request,response);
+    }
+	
+	 private String main(HttpServletRequest request) {
+					 
+		 return "main";
+	 }
+		
+     private String createStory(HttpServletRequest request) {
+    	 String storycomp = "storycomp";
+    	 if (request.getMethod().equals("GET"))  {
+    		 storycomp = "storycomp";
+    	 }
+		 return storycomp;
+	 }	
+	 
+     private String login(HttpServletRequest request) {
+    	 String login = "login";
+    	 if (request.getMethod().equals("GET"))  {
+    		 login ="login";
+    	 }
+    		 return login;
+     }
+	
+     private String logout(HttpServletRequest request) {
+    	 request.getSession().invalidate();
+         return login(request);
+     }
+     
+     private String register(HttpServletRequest request) {
+		 
+		 return "register";
+	 }
+     
+     private String profile(HttpServletRequest request) {
+		 
+		 return "profile";
+	 }
+	
 }

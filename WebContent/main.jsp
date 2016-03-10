@@ -45,13 +45,13 @@
 <h1>My Stories</h1>
 <ol>
 <c:forEach var="story" items="${stories}">
-  <li><a src="#">${story.title}</a></li>    
+  <li><a href="story.jsp?id=${story.id}">${story.title}</a></li>    
 </c:forEach>
 </ol>
 </div>    
          
 <div class="col-md-4">
-<a src="#"><h1>Create a new Story!</h1></a>
+<a href="StoryServlet?action=createStory"><h1>Create a new Story!</h1></a>
 </div> 
 </div>
 </div> 
