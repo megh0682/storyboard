@@ -2,16 +2,10 @@
  * It contains HTML event calls to javascript functions defined here.
  */
 
-
-	var ctx, color ="#000";	
+    var ctx, color ="#000";	
 	// function to setup a new canvas for drawing
 	function newCanvas(){
-		//var canvas = document.getElementById('canvas');
-	  //define and resize canvas
-	  document.getElementById("canvascontent").style.height = window.innerHeight-200;
-	  document.getElementById("canvascontent").style.height = window.innerWidth-200;
-	  var canvas = '<canvas id="canvas" width="'+(window.innerWidth -200)+'" height="'+(window.innerHeight-200)+'"></canvas>';
-	  document.getElementById("canvascontent").innerHTML = canvas;
+	//alert("Inside newCanvas function");
 	  // setup canvas
 	  if (canvas.getContext){
 	  ctx = canvas.getContext("2d");
@@ -19,15 +13,15 @@
 	  ctx.lineWidth = 2;	
 	  ctx.beginPath();
 	  
-	   /* ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle
+	    /*ctx.arc(75,75,50,0,Math.PI*2,true); // Outer circle
 	    ctx.moveTo(110,75);
 	    ctx.arc(75,75,35,0,Math.PI,false);  // Mouth (clockwise)
 	    ctx.moveTo(65,65);
 	    ctx.arc(60,65,5,0,Math.PI*2,true);  // Left eye
 	    ctx.moveTo(95,65);
 	    ctx.arc(90,65,5,0,Math.PI*2,true);  // Right eye
-	    ctx.stroke();
-		*/
+	    ctx.stroke();*/
+		
 		// setup to trigger drawing on mouse or touch
 	    drawTouch();
 	    drawPointer();

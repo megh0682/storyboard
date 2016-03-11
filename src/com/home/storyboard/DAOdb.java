@@ -1,5 +1,6 @@
 package com.home.storyboard;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 import com.j256.ormlite.dao.Dao;
@@ -7,6 +8,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.StatementBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.table.TableUtils;
 import com.j256.ormlite.support.ConnectionSource;
@@ -186,10 +188,18 @@ public class DAOdb {
 				 
 				return user;
 		    }
-		 
-		 
-		 
-		 
+	 
+	 public void updateStoryPic(int storyid, String mime, InputStream is) throws SQLException{
+		 try{
+         UpdateBuilder<Story, Integer> updateBuilder = storyDAO.updateBuilder();
+         updateBuilder.updateColumnValue("storypic", is);
+         updateBuilder.where().eq("id",storyid);
+         updateBuilder.update();
+		 }catch(Exception e){
+			 lastError = e.getMessage().toString();
+		 }
+	 }
+			 
 	public void close() {
 		 if (connectionSource != null) {
 				try {

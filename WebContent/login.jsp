@@ -8,7 +8,6 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src = "http://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src = "http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script type="text/javascript" src="cis.js"></script>
 <script type="text/javascript" src="story.js"></script>
 <title>Login Page</title>
 </head>
@@ -27,6 +26,7 @@
             <label for ="myname">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="text" required class="form-control"/>
             <label for ="mypasscode">Passcode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" required class="form-control"/><br><br>
             <input type="button"  id="savename" value="Login"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
+            <span><input type="button" id="register" value="New User Register here"/></span>
      </div>  
 	 </form> 
 </div>
