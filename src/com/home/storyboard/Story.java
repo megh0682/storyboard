@@ -1,0 +1,155 @@
+package com.home.storyboard;
+import java.io.Serializable;
+import java.sql.Blob;
+
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+/**
+ * Example user object that is persisted to disk by the DAO and other example classes.
+ */
+
+@DatabaseTable(tableName = "Stories")
+public class Story implements Serializable {
+
+// for QueryBuilder to be able to find the fields
+	public static final String TITLE_FIELD_NAME = "title";
+	public static final String BEGIN_FIELD_NAME = "firstPart";
+	public static final String MIDDLE_FIELD_NAME = "middlePart";
+	public static final String END_FIELD_NAME = "lastPart";
+	public static final String PICTURE_FIELD_NAME = "storyPic";
+	public static final String AUTHORID_FIELD_NAME = "authorid";
+
+	
+
+	@DatabaseField(columnName = TITLE_FIELD_NAME, canBeNull = false)
+	private String title;
+	
+	@DatabaseField(columnName = BEGIN_FIELD_NAME, canBeNull = false)
+	private String firstPart;
+	
+	@DatabaseField(columnName =MIDDLE_FIELD_NAME, canBeNull = false)
+	private String middlePart;
+	
+	@DatabaseField(columnName = END_FIELD_NAME, canBeNull = false)
+	private String lastPart;
+
+	@DatabaseField(columnName = PICTURE_FIELD_NAME, dataType = DataType.BYTE_ARRAY)
+	private byte[]  storypic;
+	
+	@DatabaseField(columnName =AUTHORID_FIELD_NAME)
+	private Integer authorid;
+
+	@DatabaseField(generatedId = true)
+	private Integer id;
+	
+	
+	Story() {
+		// all persisted classes must define a no-arg constructor with at least package visibility
+	}
+	
+	public Story(Integer id) {
+	        this.id = id;
+	}   	
+
+	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart) {
+        this.id = id;
+        this.title = title;
+        this.firstPart = firstPart;
+        this.middlePart = middlePart;
+        this.lastPart = lastPart;
+    }
+	
+	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart,byte[]storypic) {
+        this.id = id;
+        this.title = title;
+        this.firstPart = firstPart;
+        this.middlePart = middlePart;
+        this.lastPart = lastPart;
+        this.storypic = storypic;
+    }
+
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getfirstPart() {
+		return firstPart;
+	}
+	
+	public String getmiddlePart() {
+		return middlePart;
+	}
+	
+	public String getlastPart() {
+		return lastPart;
+	}
+ 	
+	public byte[] getstoryPic() {
+		return storypic;
+	}
+	
+	public Integer getAuthorid() {
+		return authorid;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public void setfirstPart(String firstPart) {
+		this.firstPart = firstPart;
+	}
+	
+	public void setmiddlePart(String middlePart) {
+		this.middlePart = middlePart;
+	}
+	
+	public void setlastPart(String lastPart) {
+		this.lastPart = lastPart;
+	}
+		
+	public void setStoryPic(byte[] storypic) {
+		this.storypic = storypic;
+	}
+	
+	public void setAuthorid(Integer authorid) {
+		this.authorid = authorid;
+	}
+	
+
+	 @Override
+	    public int hashCode() {
+	        int hash = 0;
+	        hash += (id != null ? id.hashCode() : 0);
+	        return hash;
+	    }
+
+	 @Override
+	    public boolean equals(Object object) {
+	        // TODO: Warning - this method won't work in the case the id fields are not set
+	        if (!(object instanceof Profile)) {
+	            return false;
+	        }
+	        Story other = (Story) object;
+	        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+	            return false;
+	        }
+	        return true;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "com.home.storyboard.Profile[ id=" + id + " ]";
+	    }
+}

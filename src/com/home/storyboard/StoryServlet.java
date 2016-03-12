@@ -24,13 +24,28 @@ import javax.xml.bind.DatatypeConverter;
 public class StoryServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-    String action=null;
+	JSONObject json = new JSONObject();  
+	String jsontostring=null;		
+	String action =null;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		action = request.getParameter("action");
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
-		JSONObject json = new JSONObject();  
+	if (action == null) action = "login";    
+    switch (action) {
+        case "login": jsontostring = login(request);break;
+        case "createStory": jsontostring = createStory(request);break;
+        default: ;
+    }
+    out.write(jsontostring);
+}//doPost method ends here.
+	
+//login post method	
+private String login(HttpServletRequest request){
+		String username = request.getParameter("name");
+		String password = request.getParameter("password");
+		
 		DAOdb db = null;
         try {
               db = new DAOdb();
@@ -38,92 +53,95 @@ public class StoryServlet extends HttpServlet {
  
             e.printStackTrace();
         }
-		
-	if (action==null){
-			String username = request.getParameter("name");
-			String password = request.getParameter("password");
-						
-		    if(username!=null && password!=null){
-			   LoginBean bean = new LoginBean(username, password);
-				if (LoginValidator.validate(bean)) {
-				User user = db.Authenticate(username, password);
-				    if (user == null) {
-		                String error = db.getLastError();
-		                json.put("error", error);
-		            }else {
-		                request.getSession().setAttribute("user", user);
-		               	Profile userprof = db.getProfilebyUsername(username);
-		               	if(userprof!=null){
-		               	      System.out.println(userprof.getFirstname() + " "+ userprof.getLastname());
-		               	      request.getSession().setAttribute("profile", userprof);
-		                      List <Story> stories = db.getStoriesbyUsername(username);
-		                      System.out.println(stories.get(0) );
-		               	      if(!stories.isEmpty()){
-		               	    	  request.getSession().setAttribute("stories", stories);
-		               	    	  Gson gson = new Gson();
-		               	    	  String jsonStories = gson.toJson(stories);
-		               	          System.out.println("jsonStories = " + jsonStories);
-		               	    	  
-		               	      }else{
-		               	    	request.getSession().setAttribute("stories", stories);
-		               	      }
-		                      String url ="main.jsp";
-		                      json.put("redirect",url);
-		               	}else{
-		               	     String error = db.getLastError();
-			                 json.put("error", error);
-		               	}
-		                
-		            }
-			   }else{
-				    System.out.println("Username or password cannot be validated.");
-		            String error = "Invalid user name or password";
+					
+	    if(username!=null && password!=null){
+		   LoginBean bean = new LoginBean(username, password);
+			if (LoginValidator.validate(bean)) {
+			User user = db.Authenticate(username, password);
+			    if (user == null) {
+	                String error = db.getLastError();
+	                json.put("error", error);
+	            }else {
+	                request.getSession().setAttribute("user", user);
+	               	Profile userprof = db.getProfilebyUsername(username);
+	               	if(userprof!=null){
+	               	      System.out.println(userprof.getFirstname() + " "+ userprof.getLastname());
+	               	      request.getSession().setAttribute("profile", userprof);
+	                      List <Story> stories = db.getStoriesbyUsername(username);
+	                      System.out.println(stories.get(0) );
+	               	      if(!stories.isEmpty()){
+	               	    	  request.getSession().setAttribute("stories", stories);
+	               	    	  Gson gson = new Gson();
+	               	    	  String jsonStories = gson.toJson(stories);
+	               	          System.out.println("jsonStories = " + jsonStories);
+	               	    	  
+	               	      }else{
+	               	    	request.getSession().setAttribute("stories", stories);
+	               	      }
+	                      String url ="main.jsp";
+	                      json.put("redirect",url);
+	               	}else{
+	               	     String error = db.getLastError();
+		                 json.put("error", error);
+	               	}
+	                
+	            }
+		   }else{
+			    System.out.println("Username or password cannot be validated.");
+	            String error = "Invalid user name or password";
+	            json.put("error",error);
+		    }
+		 }
+	    // finally output the json string       
+	    return (json.toString());	
+}
+//createStory post method	
+private String createStory(HttpServletRequest request){
+	    String storytitle= request.getParameter("storyTitle");
+		String storybegin=request.getParameter("storyBegin");
+		String storymiddle=request.getParameter("storyMiddle");
+		String storyend=request.getParameter("storyEnd");
+		String image_contents = request.getParameter("contents");
+		DAOdb db = null;
+        try {
+              db = new DAOdb();
+            } catch (Exception e) {
+ 
+            e.printStackTrace();
+        }
+		User user = (User) request.getSession().getAttribute("user");
+	if (user!=null)
+	{
+			if(storytitle!=null && storybegin!=null && storymiddle!=null && storyend!=null ){
+				Story S = new Story();
+				S.setTitle(storytitle);
+				S.setfirstPart(storybegin);
+				S.setmiddlePart(storymiddle);
+				S.setlastPart(storyend);
+				db.addStory(S);		
+			  if(image_contents!=null){
+				System.out.println(image_contents);
+	            image_contents = image_contents.substring("data:image/png;base64,".length());
+	            byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
+	            InputStream is = new ByteArrayInputStream(decodedBytes);
+			    try {
+					db.updateStoryPic(S.getId(), "png", is);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					String error = e.getMessage().toString();
 		            json.put("error",error);
-			    }
-			 }
-		    // finally output the json string       
-		    out.write(json.toString());	
-	}else if(action=="createStory"){
-			String storytitle= request.getParameter("storyTitle");
-			String storybegin=request.getParameter("storyBegin");
-			String storymiddle=request.getParameter("storyMiddle");
-			String storyend=request.getParameter("storyEnd");
-			String image_contents = request.getParameter("contents");
-			User user = (User) request.getSession().getAttribute("user");
-		if (user!=null)
-		{
-				if(storytitle!=null && storybegin!=null && storymiddle!=null && storyend!=null ){
-					Story S = new Story();
-					S.setTitle(storytitle);
-					S.setfirstPart(storybegin);
-					S.setmiddlePart(storymiddle);
-					S.setlastPart(storyend);
-					db.addStory(S);		
-				  if(image_contents!=null){
-					System.out.println(image_contents);
-		            image_contents = image_contents.substring("data:image/png;base64,".length());
-		            byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
-		            InputStream is = new ByteArrayInputStream(decodedBytes);
-				    try {
-						db.updateStoryPic(S.getId(), "png", is);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						String error = e.getMessage().toString();
-			            json.put("error",error);
-					}
-			      }
-				String url = "story.jsp";
-				request.getSession().setAttribute("story", S);
-				json.put("redirect", url);
-			   }
-         }
-   }
-	else{
-		//else block
-	}
-}//doPost method ends here.
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				}
+		      }
+			String url = "story.jsp";
+			request.getSession().setAttribute("story", S);
+			json.put("redirect", url);
+		   }
+     }
+	return json.toString();
+}
+
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String action = request.getParameter("action");   
         if (action == null) action = "main";
