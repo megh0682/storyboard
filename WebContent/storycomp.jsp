@@ -61,8 +61,8 @@
             <input type="button" value="Save"/><span></span><span><input type="button" value="Cancel"/></span>
       <!--   </div>-->
      </form>
-    
-    <form id="formsubmitstory" role="form">
+     
+     <form id="formsubmitstory" role="form">
      <!--   <div class="col-md-3" class = "form-group" id="submitstory" >-->
             <label for ="storyend"><h3><i>Once submitted, you cannot edit your story!</i></h3></label><br>
             <input type="button" value="Submit"/><span></span>

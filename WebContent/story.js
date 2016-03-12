@@ -3,22 +3,22 @@
  */
  $(document).ready(function(){
 	 
-	 String s_title;
-	 String s_begin;
-	 String s_middle;
-	 String s_end;
-	 String S_image;
+	 var s_title;
+	 var s_begin;
+	 var s_middle;
+	 var s_end;
+	 var s_image;
 	 
-	 $("input[value=Draw on Canvas]").click(function(){
-		 $("#lnkcanvas").href = "draw.html";
-	 });
+	 //$("input[value=Draw on Canvas]").click(function(){
+	//	 $("#lnkcanvas").href = "draw.html";
+	// });
 	  
 
 	$("#myname input[value=Login]").click(function(){
 	var name = $("#myname input[type=text]").val();
 	var password = $("#myname input[type=password]").val();
 	if(name=="")
-	  alert("Please enter your name!");
+	  	("Please enter your name!");
 	else if(password=="")
       alert("Please enter your password!");
 	else
@@ -71,7 +71,7 @@
 		  s_title = formTitle;
 		  $("#titlesuccess").show("slow", function() {
 					  $(this).css("color","green");
-				      $(this).text("Story Title "+responsetext+" saved successfully.");
+				      $(this).text("Story Title saved successfully.");
 				    });
 		  $("#titlesuccess").hide("slow", function() {
 					  $(this).text("");
@@ -97,7 +97,7 @@
 				 s_begin = formbgn;
 				  $("#bgnsuccess").show("slow", function() {
 							  $(this).css("color","green");
-						      $(this).text("Story beginning "+responsetext+" saved successfully.");
+						      $(this).text("Story beginning saved successfully.");
 						    });
 				  $("#bgnsuccess").hide("slow", function() {
 							  $(this).text("");
@@ -123,7 +123,7 @@
 				s_middle = formmiddle;
 				 $("#middlesuccess").show("slow", function() {
 					  $(this).css("color","green");
-				      $(this).text("Story middle "+responsetext+" saved successfully.");
+				      $(this).text("Story middle saved successfully.");
 				    });
 		  $("#middlesuccess").hide("slow", function() {
 					  $(this).text("");
@@ -148,7 +148,7 @@
 							s_end = formend;
 					  $("#endsuccess").show("slow", function() {
 								  $(this).css("color","green");
-							      $(this).text("Story middle "+responsetext+" saved successfully.");
+							      $(this).text("Story middle saved successfully.");
 							    });
 					  $("#endsuccess").hide("slow", function() {
 								  $(this).text("");
@@ -166,12 +166,18 @@
 				
 	/**********************************************************************/	
 					$("#formsubmitstory input[value=Submit]").click(function(){
+						alert("i m in submitstory click function");
+						var formTitle = $("#formTitle input[type=text]").val();
+                        var formbgn = $("#formbgn input[type=text]").val();
+                        var formmiddle = $("#formbgn input[type=text]").val();
+                        var formend = $("#formbgn input[type=text]").val();
+                        var s_image="";
 				    if(s_title!=""&& s_begin!="" && s_middle!="" && s_end!=""){
 						$.ajax({
 							  type: "POST",
 							  url: "StoryServlet",
 							  dataType: "json",
-							  data: {action:"createStory", storyTitle:s_title, storyBegin:s_begin, storyMiddle:s_middle, storyEnd:s_end, contents:s_image},
+							  data: {action:"createStory", storyTitle:formTitle, storyBegin:formbgn, storyMiddle:formmiddle, storyEnd:formend, contents:s_image},
 							  success: function(json){
 									alert("Success")  
 									if (json.redirect) {
@@ -203,7 +209,6 @@
 						// alert("I m ikn btndownload");
 						 var canvas = document.getElementById('canvas');
 						 var dataURL = canvas.toDataURL();
-						 s_image=dataURL;
 						 console.log(dataURL);
 						 //alert(dataURL);
 						

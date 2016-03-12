@@ -24,9 +24,9 @@ import javax.xml.bind.DatatypeConverter;
 public class StoryServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-			
+    String action=null;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
+		action = request.getParameter("action");
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
@@ -118,6 +118,9 @@ public class StoryServlet extends HttpServlet {
 			   }
          }
    }
+	else{
+		//else block
+	}
 }//doPost method ends here.
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
