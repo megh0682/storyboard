@@ -36,7 +36,13 @@ public class StoryServlet extends HttpServlet {
     switch (action) {
         case "login": jsontostring = login(request);break;
         case "createStory": jsontostring = createStory(request);break;
-        default: ;
+        case "passtitle": jsontostring = passtitle(request);break;
+        case "passbegin":jsontostring = passbegin(request);break;
+        case "passmiddle":jsontostring = passmiddle(request);break;
+        case "passend":jsontostring = passend(request);break;
+        case "passcanvas": jsontostring = passcanvas(request);break;
+        default: jsontostring = homepage(request);break;
+    	
     }
     out.write(jsontostring);
 }//doPost method ends here.
@@ -112,12 +118,18 @@ private String createStory(HttpServletRequest request){
 		User user = (User) request.getSession().getAttribute("user");
 	if (user!=null)
 	{
+		    
+		    Integer userid = user.getId();
+		    System.out.println(userid);
 			if(storytitle!=null && storybegin!=null && storymiddle!=null && storyend!=null ){
 				Story S = new Story();
+				S.setId(null);
 				S.setTitle(storytitle);
-				S.setfirstPart(storybegin);
-				S.setmiddlePart(storymiddle);
-				S.setlastPart(storyend);
+				S.setFirstPart(storybegin);
+				S.setMiddlePart(storymiddle);
+				S.setLastPart(storyend);
+				S.setStorypic(null);
+				S.setAuthorid(userid);
 				db.addStory(S);		
 			  if(image_contents!=null){
 				System.out.println(image_contents);
@@ -137,6 +149,48 @@ private String createStory(HttpServletRequest request){
 			json.put("redirect", url);
 		   }
      }
+	return json.toString();
+}
+
+
+private String passtitle(HttpServletRequest request){
+	request.getSession().setAttribute("passtitle", request.getParameter("storyTitle"));
+	json.put("success", "success");
+	return json.toString();
+
+}
+
+
+private String passbegin(HttpServletRequest request){
+	request.getSession().setAttribute("passbegin", request.getParameter("storyBegin"));
+	json.put("success", "success");
+	return json.toString();
+
+}
+
+private String passmiddle(HttpServletRequest request){
+	request.getSession().setAttribute("passmiddle", request.getParameter("storyMiddle"));
+	json.put("success", "success");
+	return json.toString();
+
+}
+
+private String passend(HttpServletRequest request){
+	request.getSession().setAttribute("passend", request.getParameter("storyEnd"));
+	json.put("success", "success");
+	return json.toString();
+
+}
+
+private String passcanvas(HttpServletRequest request){
+	request.getSession().setAttribute("passcanvas", request.getParameter("contents"));
+	json.put("imagesuccess", "success");
+	return json.toString();
+
+}
+
+private String homepage(HttpServletRequest request){
+	json.put("storycomppage", "storycomp.jsp");
 	return json.toString();
 }
 

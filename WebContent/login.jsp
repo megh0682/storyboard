@@ -26,7 +26,7 @@
             <label for ="myname">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="text" required class="form-control"/>
             <label for ="mypasscode">Passcode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" required class="form-control"/><br><br>
             <input type="button"  id="savename" value="Login"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
-            <span><input type="button" id="register" value="New User Register here"/></span>
+            <input type="button" id="register" value="New User Register here"/>
      </div>  
 	 </form> 
 </div>

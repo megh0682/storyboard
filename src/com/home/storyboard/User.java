@@ -37,11 +37,12 @@ public class User implements Serializable {
 		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
 
-	public User(String username) {
-		this.username = username;
+	public User(Integer id) {
+		this.id = id;
 	}
 
-	public User(String username, String password) {
+	public User(Integer id,String username, String password) {
+		this.id = id;
 		this.username = username;
 		this.password = password;
 	}

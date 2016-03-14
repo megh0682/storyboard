@@ -39,172 +39,269 @@
 		$("#myname input[type=text]").val("");	
 	 });
  
-	/**********************************************************************/
+	
+/**********************************************************************/
 	
 	$("#formTitle input[value=Save]").click(function(){
-		var formTitle = $("#formTitle input[type=text]").val();
-		if(formTitle==""){			
+		var formTitle = $("#formTitle textarea").val();
+		if(formTitle=="")
 		  alert("Please enter the title of your story!");
-		}else{
-		  s_title = formTitle;
-		  $("#titlesuccess").show("slow", function() {
+		else
+		  $.ajax({
+			  type: "POST",
+			  url: "StoryServlet",
+			  data: {storyTitle:formTitle,action:"passtitle"},
+			  dataType: "json",
+			  success: function(json){
+				$("#titlesuccess").show("slow", function() {
 					  $(this).css("color","green");
-				      $(this).text("Story Title "+responsetext+" saved successfully.");
+				      $(this).text("Story Title saved successfully.");
 				    });
-		  $("#titlesuccess").hide("slow", function() {
+				$("#titlesuccess").hide("slow", function() {
 					  $(this).text("");
 				    });
-		  $("#titlesuccess").show(5,function() {
+				$("#titlesuccess").show(5,function() {
 					  $(this).text("");
-		  });
-				    
-		}
-	});
-	     
+				    });
+			   },
+			   error: function(){
+	 			  console.log("fail") ; 
+		       },
+			 
+			});
+	     });
 		
-    $("#formTitle input[value=Cancel]").click(function(){
-   	$("#formTitle textarea").val("");	
-	});
+		$("#formTitle input[value=Cancel]").click(function(){
+			$("#formTitle textarea").val("");	
+		 });
 	
     /**********************************************************************/
+	
 		$("#formbgn input[value=Save]").click(function(){
-			var formbgn = $("#formbgn input[type=text]").val();
+			var formbgn = $("#formbgn textarea").val();
 			if(formbgn=="")
 			  alert("Please enter the beginning of your story!");
-			else{
-				 s_begin = formbgn;
-				  $("#bgnsuccess").show("slow", function() {
-							  $(this).css("color","green");
-						      $(this).text("Story beginning "+responsetext+" saved successfully.");
-						    });
-				  $("#bgnsuccess").hide("slow", function() {
-							  $(this).text("");
-						    });
-				  $("#bgnsuccess").show(5,function() {
-							  $(this).text("");
-				  });
-						    
-				}
-			});
+			else
+			  $.ajax({
+				  type: "POST",
+				  url: "StoryServlet",
+				  data: {storyBegin:formbgn,action:"passbegin"},
+				  dataType: "json",
+				  success: function(json){
+					$("#bgnsuccess").show("slow", function() {
+						  $(this).css("color","green");
+					      $(this).text("Form beginning saved successfully.");
+					    });
+					$("#bgnsuccess").hide("slow", function() {
+						  $(this).text("");
+					    });
+					$("#bgnsuccess").show(5,function() {
+						  $(this).text("");
+					    });
+				   },
+				   error: function(){
+		 			  console.log("fail") ; 
+			       },
+				 
+				});
+		     });
 			
 			$("#formbgn input[value=Cancel]").click(function(){
 				$("#formbgn textarea").val("");	
 			 });	
 		
    /**********************************************************************/	
-	
 			$("#formmiddle input[value=Save]").click(function(){
-				var formmiddle = $("#formbgn input[type=text]").val();
+				var formmiddle = $("#formmiddle textarea").val();
 				if(formmiddle=="")
-				  alert("Story middle cannot be blank.");
-				else{
-				s_middle = formmiddle;
-				 $("#middlesuccess").show("slow", function() {
-					  $(this).css("color","green");
-				      $(this).text("Story middle "+responsetext+" saved successfully.");
-				    });
-		  $("#middlesuccess").hide("slow", function() {
-					  $(this).text("");
-				    });
-		  $("#middlesuccess").show(5,function() {
-					  $(this).text("");
-		  });
-				    
-		}
-	});
+					 alert("Please enter the middle of your story!");
+				else
+				  $.ajax({
+					  type: "POST",
+					  url: "StoryServlet",
+					  data: {storyMiddle:formmiddle,action:"passmiddle"},
+					  dataType: "json",
+					  success: function(json){
+						$("#middlesuccess").show("slow", function() {
+							  $(this).css("color","green");
+						      $(this).text("Story middle content saved successfully.");
+						    });
+						$("#middlesuccess").hide("slow", function() {
+							  $(this).text("");
+						    });
+						$("#middlesuccess").show(5,function() {
+							  $(this).text("");
+						    });
+					   },
+					   error: function(){
+			 			  console.log("fail") ; 
+				       },
+					 
+					});
+			     });
 				
 				$("#formmiddle input[value=Cancel]").click(function(){
 					$("#formmiddle textarea").val("");	
 				 });	
 			
 	 /**********************************************************************/	
+			
 				$("#formend input[value=Save]").click(function(){
-					var formend = $("#formbgn input[type=text]").val();
+					var formend = $("#formend textarea").val();
 					if(formend=="")
-					  alert("Story end cannot be blank.");
-					else{
-							s_end = formend;
-					  $("#endsuccess").show("slow", function() {
+						 alert("Please enter the end of your story!");
+					else
+					  $.ajax({
+						  type: "POST",
+						  url: "StoryServlet",
+						  data: {storyEnd:formend,action:"passend"},
+						  dataType: "json",
+						  success: function(json){
+							$("#endsuccess").show("slow", function() {
 								  $(this).css("color","green");
-							      $(this).text("Story middle "+responsetext+" saved successfully.");
+							      $(this).text("Story end contents saved successfully.");
 							    });
-					  $("#endsuccess").hide("slow", function() {
+							$("#endsuccess").hide("slow", function() {
 								  $(this).text("");
 							    });
-					  $("#endsuccess").show(5,function() {
+							$("#endsuccess").show(5,function() {
 								  $(this).text("");
-					  });
-							    
-					}
-				});
+							    });
+						   },
+						   error: function(){
+				 			  console.log("fail") ; 
+					       },
+						 
+						});
+				     });
 					
 					$("#formend input[value=Cancel]").click(function(){
 						$("#formend textarea").val("");	
 					 });	
 				
-	/**********************************************************************/	
-					$("#formsubmitstory input[value=Submit]").click(function(){
-				    if(s_title!=""&& s_begin!="" && s_middle!="" && s_end!=""){
-						$.ajax({
-							  type: "POST",
-							  url: "StoryServlet",
-							  dataType: "json",
-							  data: {action:"createStory", storyTitle:s_title, storyBegin:s_begin, storyMiddle:s_middle, storyEnd:s_end, contents:s_image},
-							  success: function(json){
-									alert("Success")  
-									if (json.redirect) {
-						            // data.redirect contains the string URL to redirect to
-						            window.location.href = json.redirect;
-						            }else{
-						            // data.form contains the HTML for the replacement form
-						            alert(json.error);
-						            $("#formTitle input[type=text]").val("");	
-						            }
-						        
-								   },
+	/**********************************************************************/
+	$("#formsubmitstory input[value=Submit]").click(function(){
+		var formTitle = $("#hiddenformtitle").val();
+		var formbgn = $("#hiddenformbgn").val();
+		var formmiddle =$("#hiddenformmiddle").val();
+		var formend = $("#hiddenformend").val();
+		var formimage = $("#hiddenimagecontent").val();
+		if((formTitle="") || (formbgn="") || (formmiddle="") || (formend="")){
+			alert("Story title, beginning, middle and ending is not filled and saved successfully.");
+		  }else{
+		
+		   if ((formimage == null) || (formimage=""))
+		   {
+					 var canvas = document.getElementById('canvas');
+					 var dataURL = canvas.toDataURL();
+					 console.log(dataURL);
+					 //alert(dataURL);
+					 
+					 $.ajax({
+						  type: "POST",
+						  url: "StoryServlet",
+						  data: {contents: dataURL,action:"passcanvas"},
+						  success: function(json){
+								$("#endsuccess").show("slow", function() {
+									  $(this).css("color","green");
+								      $(this).text("Entered text "+json.success+" saved successfully.");
+								    });
+								$("#endsuccess").hide("slow", function() {
+									  $(this).text("");
+								    });
+								$("#endsuccess").show(5,function() {
+									  $(this).text("");
+								    });
+							   },
 							   error: function(){
 					 			  console.log("fail") ; 
 						       },
 							 
 							});
-					}
-				    else{
-				    	alert("Title, beginning,middle and end cannot be blank.");
-				    }
-				        });
-						
+					 formimage =$("#hiddenimagecontent").val();
+			}
+		
+	             	$.ajax({
+					    type: "POST",
+					    url: "StoryServlet",
+					    dataType: "json",
+					    data: {action:"createStory", storyTitle:formTitle, storyBegin:formbgn, storyMiddle:formmiddle, storyEnd:formend, contents:formimage},
+					    success: function(json){
+							alert("Success")  
+							if (json.redirect) {
+					        // data.redirect contains the string URL to redirect to
+					         window.location.href = json.redirect;
+					         }else{
+				             // data.form contains the HTML for the replacement form
+				             alert(json.error);
+				             }
+						   },
+				        error: function(){
+					 			  console.log("fail") ; 
+						       },
+							 
+							});
+			}
+			
+					 
+			   });
+					
 								
-/*******************************************************************************************************************************/			
-					
-					
+/**********************************************************************/	
 				   	$("#btndownload").click(function(){
-						// alert("I m ikn btndownload");
+						 alert("I m ikn btndownload");
 						 var canvas = document.getElementById('canvas');
 						 var dataURL = canvas.toDataURL();
-						 s_image=dataURL;
 						 console.log(dataURL);
 						 //alert(dataURL);
-						
-						  $("#canvassuccess").show("slow", function() {
-									  $(this).css("color","green");
-								      $(this).text("Story canvas saved successfully.");
-								    });
-						  $("#canvassuccess").hide("slow", function() {
-									  $(this).text("");
-								    });
-						  $("#canvassuccess").show(5,function() {
-									  $(this).text("");
-						  });
-								    
-										
+						 
+						 $.ajax({
+							  type: "POST",
+							  url: "StoryServlet",
+							  data: {contents: dataURL,action:"passcanvas"},
+							  dataType: "json",
+							  success: function(json){
+									$("#endsuccess").show("slow", function() {
+										  $(this).css("color","green");
+									      $(this).text("Story Canvas "+json.success+" saved successfully.");
+									    });
+									$("#endsuccess").hide("slow", function() {
+										  $(this).text("");
+									    });
+									$("#endsuccess").show(5,function() {
+										  $(this).text("");
+									    });
+								   },
+								   error: function(){
+						 			  console.log("fail") ; 
+							       },
+								 
+								});
 					});
-    /**********************************************************************/
+/**********************************************************************/
 				   	
 				   	$('textarea').on('input', function() {
 				   	  $(this).outerHeight(38).outerHeight(this.scrollHeight);
 				   	});
 /************************************************************************************/
-				   	
+					$("#lnktosubmit").click(function(){
+						 alert("I m in lnktosubmit");
+						 var formTitle = $("#formTitle textarea").val();
+						 var formbgn = $("#formbgn textarea").val();
+						 var formmiddle =$("#formmiddle textarea").val();
+						 var formend = $("#formend textarea").val();
+						 
+					if (formTitle!=null && formbgn!=null && formmiddle!=null && formend!=null)
+					  {
+						window.location.href = "draw.jsp";					 
+						
+					  }else{
+						  
+						alert("Story title, beginning , middle and end should be filled and saved successfully!")  
+					  }
+					
+					
+					});   	
 				  
 					
 						

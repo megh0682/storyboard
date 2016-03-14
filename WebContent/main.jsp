@@ -14,7 +14,7 @@
 <script type="text/javascript" src = "http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script type="text/javascript" src="story.js"></script>
 <script type="text/javascript" src="cis.js"></script>
-<title>Hello ${user}</title>
+<title>Hello ${user.username}</title>
 </head>
 <body>
 <header>
@@ -25,7 +25,7 @@
 <div class="row">
 
 <div class="col-md-4" class = "form-group">
-<h1>Hello ${user.username}! </h1>
+<h1>Hello ${user.username} with  ${user.id} ! </h1>
 <c:choose>
 <c:when test="${user ne null}">
 <label for="fn"> First-Name: </label><input type="text" disabled class="form-control" value = ${profile.firstname}>
@@ -64,7 +64,7 @@
  </p>
 </c:otherwise>
 </c:choose>
- 
+
 <footer>
  love reading stories & love writing stories & love sharing stories
 </footer>

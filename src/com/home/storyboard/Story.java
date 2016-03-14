@@ -53,21 +53,24 @@ public class Story implements Serializable {
 	        this.id = id;
 	}   	
 
-	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart) {
+	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart, Integer authorid) {
         this.id = id;
         this.title = title;
         this.firstPart = firstPart;
         this.middlePart = middlePart;
         this.lastPart = lastPart;
+        this.authorid=authorid;
+        
     }
 	
-	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart,byte[]storypic) {
+	public Story(Integer id, String title, String firstPart, String middlePart, String lastPart,byte[]storypic, Integer authorid) {
         this.id = id;
         this.title = title;
         this.firstPart = firstPart;
         this.middlePart = middlePart;
         this.lastPart = lastPart;
         this.storypic = storypic;
+        this.authorid=authorid;
     }
 
 
@@ -79,19 +82,19 @@ public class Story implements Serializable {
 		return title;
 	}
 	
-	public String getfirstPart() {
+	public String getFirstPart() {
 		return firstPart;
 	}
 	
-	public String getmiddlePart() {
+	public String getMiddlePart() {
 		return middlePart;
 	}
 	
-	public String getlastPart() {
+	public String getLastPart() {
 		return lastPart;
 	}
  	
-	public byte[] getstoryPic() {
+	public byte[] getStorypic() {
 		return storypic;
 	}
 	
@@ -107,19 +110,19 @@ public class Story implements Serializable {
 		this.title = title;
 	}
 	
-	public void setfirstPart(String firstPart) {
+	public void setFirstPart(String firstPart) {
 		this.firstPart = firstPart;
 	}
 	
-	public void setmiddlePart(String middlePart) {
+	public void setMiddlePart(String middlePart) {
 		this.middlePart = middlePart;
 	}
 	
-	public void setlastPart(String lastPart) {
+	public void setLastPart(String lastPart) {
 		this.lastPart = lastPart;
 	}
 		
-	public void setStoryPic(byte[] storypic) {
+	public void setStorypic(byte[] storypic) {
 		this.storypic = storypic;
 	}
 	

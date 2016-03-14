@@ -11,12 +11,11 @@
 <script type="text/javascript" src = "http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script type="text/javascript" src="story.js"></script>
 <script type="text/javascript" src="cis.js"></script>
-<title>Insert title here</title>
+<title>Create a Story</title>
 </head>
 <body>
 <div class="container">
-     <a href="draw.html" id ="lnkcanvas"><input type="button" id="buttonCanvas" value ="Draw on Canvas"/></a>
-  <!--     <form id="myname" role="form">
+     <!--     <form id="myname" role="form">
 	 <div class="col-md-4" class = "form-group">
             <label for ="myname">Enter your name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="text" required class="form-control"/>
             <input type="button"  id="savename"value="Save"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
@@ -30,7 +29,7 @@
 		<input type="submit" value="Upload" />
 		</div>
 	</form>
-	
+
  -->	
    
     <form id="formTitle" role="form">
@@ -61,10 +60,9 @@
             <input type="button" value="Save"/><span></span><span><input type="button" value="Cancel"/></span>
       <!--   </div>-->
      </form>
-    
-     <center><input id="nextCanvasPage" type="button" value="Next" onclick="draw.html"/></center> 
-     
-    
+
+     <a href="#" id ="lnktosubmit"><input type="button" id="buttonCanvas" value ="Next"/></a>
+         
 </div>
 </div>  
 </body>

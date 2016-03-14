@@ -30,13 +30,16 @@
 		<div class="row">
 
 			<div class="col-md-4" class="form-group">
-				<h1>Hello ${user.username}!</h1>
+				<h1>Hello ${user.username} with userid as ${user.id} }!</h1>
 				<c:choose>
 					<c:when test="${(user ne null) && (story ne null)}">
 						<p>${story.firstPart}</p>
 						<p>${story.middlePart}</p>
-						<p>${story.endPart}</p>
-						<p>${story.storypic}</p>
+						<p>${story.lastPart}</p>
+					<!-- 	<c:if test="${story.storypic ne null}">
+                           <p>${story.storypic}</p> 
+                        </c:if>
+					 -->	
 					</c:when>
 					<c:otherwise>
 						<p>
