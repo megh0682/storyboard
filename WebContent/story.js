@@ -179,111 +179,47 @@
 						$("#formend textarea").val("");	
 					 });	
 				
-	/**********************************************************************/
-	$("#formsubmitstory input[value=Submit]").click(function(){
-		var formTitle = $("#hiddenformtitle").val();
-		var formbgn = $("#hiddenformbgn").val();
-		var formmiddle =$("#hiddenformmiddle").val();
-		var formend = $("#hiddenformend").val();
-		var formimage = $("#hiddenimagecontent").val();
-		if((formTitle="") || (formbgn="") || (formmiddle="") || (formend="")){
-			alert("Story title, beginning, middle and ending is not filled and saved successfully.");
-		  }else{
-		
-		   if ((formimage == null) || (formimage=""))
-		   {
-					 var canvas = document.getElementById('canvas');
-					 var dataURL = canvas.toDataURL();
-					 console.log(dataURL);
-					 //alert(dataURL);
-					 
-					 $.ajax({
-						  type: "POST",
-						  url: "StoryServlet",
-						  data: {contents: dataURL,action:"passcanvas"},
-						  success: function(json){
-								$("#endsuccess").show("slow", function() {
-									  $(this).css("color","green");
-								      $(this).text("Entered text "+json.success+" saved successfully.");
-								    });
-								$("#endsuccess").hide("slow", function() {
-									  $(this).text("");
-								    });
-								$("#endsuccess").show(5,function() {
-									  $(this).text("");
-								    });
-							   },
-							   error: function(){
-					 			  console.log("fail") ; 
-						       },
-							 
-							});
-					 formimage =$("#hiddenimagecontent").val();
-			}
-		
-	             	$.ajax({
-					    type: "POST",
-					    url: "StoryServlet",
-					    dataType: "json",
-					    data: {action:"createStory", storyTitle:formTitle, storyBegin:formbgn, storyMiddle:formmiddle, storyEnd:formend, contents:formimage},
-					    success: function(json){
-							alert("Success")  
-							if (json.redirect) {
-					        // data.redirect contains the string URL to redirect to
-					         window.location.href = json.redirect;
-					         }else{
-				             // data.form contains the HTML for the replacement form
-				             alert(json.error);
-				             }
-						   },
-				        error: function(){
-					 			  console.log("fail") ; 
-						       },
-							 
-							});
-			}
-			
-					 
-			   });
-					
+	
 								
 /**********************************************************************/	
 				   	$("#btndownload").click(function(){
-						 alert("I m ikn btndownload");
+						 alert("upload canvas jquery");
+						 var hiddenid = $("#hiddenstoryid").val();
 						 var canvas = document.getElementById('canvas');
 						 var dataURL = canvas.toDataURL();
 						 console.log(dataURL);
-						 //alert(dataURL);
+						 
+						//alert(dataURL);
 						 
 						 $.ajax({
 							  type: "POST",
 							  url: "StoryServlet",
-							  data: {contents: dataURL,action:"passcanvas"},
+							  data: {contents: dataURL,storyid:hiddenid, action:"uploadcanvas"},
 							  dataType: "json",
 							  success: function(json){
-									$("#endsuccess").show("slow", function() {
-										  $(this).css("color","green");
-									      $(this).text("Story Canvas "+json.success+" saved successfully.");
-									    });
-									$("#endsuccess").hide("slow", function() {
-										  $(this).text("");
-									    });
-									$("#endsuccess").show(5,function() {
-										  $(this).text("");
-									    });
-								   },
-								   error: function(){
+								  alert("Success I am on story jsp page");
+								  if (json.storyjsp) {
+							            // data.redirect contains the string URL to redirect to
+							            window.location.href = json.storyjsp;
+							      }else{
+							            // data.form contains the HTML for the replacement form
+							            alert(json.error);
+							      }
+								  
+								  },
+							  error: function(){
 						 			  console.log("fail") ; 
 							       },
 								 
 								});
 					});
-/**********************************************************************/
+/**************************************************************************************************************************************************************/
 				   	
 				   	$('textarea').on('input', function() {
 				   	  $(this).outerHeight(38).outerHeight(this.scrollHeight);
 				   	});
-/************************************************************************************/
+				   	
+/**************************************************************************************************************************************************************/
 					$("#lnktosubmit").click(function(){
 						 alert("I m in lnktosubmit");
 						 var formTitle = $("#formTitle textarea").val();
@@ -291,11 +227,36 @@
 						 var formmiddle =$("#formmiddle textarea").val();
 						 var formend = $("#formend textarea").val();
 						 
-					if (formTitle!=null && formbgn!=null && formmiddle!=null && formend!=null)
+					if (formTitle!="" && formbgn!="" && formmiddle!="" && formend!="")
 					  {
-						window.location.href = "draw.jsp";					 
 						
-					  }else{
+						 $.ajax({
+							  type: "POST",
+							  url: "StoryServlet",
+							  data: {action:"createStory", storyTitle:formTitle, storyBegin:formbgn, storyMiddle:formmiddle, storyEnd:formend},
+							  dataType: "json",
+							  success: function(json){
+								alert("Success: I am on draw jsp page") ;
+								if (json.redirect) {
+					            // data.redirect contains the string URL to redirect to
+					            window.location.href = json.redirect;
+					            }else{
+					            // data.form contains the HTML for the replacement form
+					            alert(json.error);
+					            $("#formTitle textarea").val(formTitle);	
+					            $("#formbgn textarea").val(formbgn);	
+					            $("#formmiddle textarea").val(formmiddle);	
+					            $("#formend textarea").val(formend);	
+					            }
+					           
+								},
+							   error: function(){
+					 			  console.log("fail") ; 
+						       },
+							 
+							});
+						
+					}else{
 						  
 						alert("Story title, beginning , middle and end should be filled and saved successfully!")  
 					  }

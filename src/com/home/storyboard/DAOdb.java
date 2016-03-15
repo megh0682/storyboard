@@ -56,6 +56,20 @@ public class DAOdb {
 	        }
 	    }
 	 
+	 public Story getStorybyStoryId(Integer storyid){
+		 Story story = null;
+		 
+		 try{
+				story = storyDAO.queryForId(storyid);
+				// there should be 1 result
+			}catch(Exception e){
+					System.out.println(e.getMessage().toString());
+					lastError = e.getMessage().toString();
+				}
+		 return story;
+		 
+	 }
+	 
 	 public List<Story> getStoriesbyUsername(String username) {
 		 String uname =username;
 		 User user = getUserbyUsername(uname);

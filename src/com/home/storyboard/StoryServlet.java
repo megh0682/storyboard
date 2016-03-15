@@ -35,12 +35,12 @@ public class StoryServlet extends HttpServlet {
 	if (action == null) action = "login";    
     switch (action) {
         case "login": jsontostring = login(request);break;
-        case "createStory": jsontostring = createStory(request);break;
+        case "createStory": jsontostring = createStory(request);break; 
         case "passtitle": jsontostring = passtitle(request);break;
         case "passbegin":jsontostring = passbegin(request);break;
         case "passmiddle":jsontostring = passmiddle(request);break;
         case "passend":jsontostring = passend(request);break;
-        case "passcanvas": jsontostring = passcanvas(request);break;
+        case "uploadcanvas": jsontostring = uploadcanvas(request);break;
         default: jsontostring = homepage(request);break;
     	
     }
@@ -107,21 +107,19 @@ private String createStory(HttpServletRequest request){
 		String storybegin=request.getParameter("storyBegin");
 		String storymiddle=request.getParameter("storyMiddle");
 		String storyend=request.getParameter("storyEnd");
-		String image_contents = request.getParameter("contents");
 		DAOdb db = null;
         try {
               db = new DAOdb();
             } catch (Exception e) {
- 
-            e.printStackTrace();
+             
+             e.printStackTrace();
         }
 		User user = (User) request.getSession().getAttribute("user");
-	if (user!=null)
-	{
-		    
-		    Integer userid = user.getId();
-		    System.out.println(userid);
-			if(storytitle!=null && storybegin!=null && storymiddle!=null && storyend!=null ){
+	    if (user!=null)
+	    {	    
+		   Integer userid = user.getId();
+		   System.out.println(userid);
+		   if(storytitle!=null && storybegin!=null && storymiddle!=null && storyend!=null ){
 				Story S = new Story();
 				S.setId(null);
 				S.setTitle(storytitle);
@@ -131,27 +129,13 @@ private String createStory(HttpServletRequest request){
 				S.setStorypic(null);
 				S.setAuthorid(userid);
 				db.addStory(S);		
-			  if(image_contents!=null){
-				System.out.println(image_contents);
-	            image_contents = image_contents.substring("data:image/png;base64,".length());
-	            byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
-	            InputStream is = new ByteArrayInputStream(decodedBytes);
-			    try {
-					db.updateStoryPic(S.getId(), "png", is);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					String error = e.getMessage().toString();
-		            json.put("error",error);
-				}
-		      }
-			String url = "story.jsp";
+			String url = "draw.jsp";
 			request.getSession().setAttribute("story", S);
 			json.put("redirect", url);
 		   }
      }
 	return json.toString();
 }
-
 
 private String passtitle(HttpServletRequest request){
 	request.getSession().setAttribute("passtitle", request.getParameter("storyTitle"));
@@ -179,19 +163,45 @@ private String passend(HttpServletRequest request){
 	request.getSession().setAttribute("passend", request.getParameter("storyEnd"));
 	json.put("success", "success");
 	return json.toString();
-
-}
-
-private String passcanvas(HttpServletRequest request){
-	request.getSession().setAttribute("passcanvas", request.getParameter("contents"));
-	json.put("imagesuccess", "success");
-	return json.toString();
-
 }
 
 private String homepage(HttpServletRequest request){
 	json.put("storycomppage", "storycomp.jsp");
 	return json.toString();
+}
+
+private String uploadcanvas(HttpServletRequest request){
+	
+	String image_contents = request.getParameter("contents");
+	Integer storyid = Integer.parseInt(request.getParameter("storyid"));
+
+	DAOdb db = null;
+    try {
+          db = new DAOdb();
+        } catch (Exception e) {
+         
+         e.printStackTrace();
+    }	
+	
+	if((image_contents!=null) && (storyid!=null)){
+		System.out.println(image_contents + storyid);
+        image_contents = image_contents.substring("data:image/png;base64,".length());
+        byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
+        InputStream is = new ByteArrayInputStream(decodedBytes);
+	    try {
+			db.updateStoryPic(storyid, "png", is);
+			String url = "story.jsp";
+			//request.getSession().setAttribute("story", S);
+			json.put("storyjsp", url);
+			} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			String error = e.getMessage().toString();
+            json.put("error",error);
+		}
+      }
+		   
+			return json.toString();
+
 }
 
 
@@ -206,6 +216,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             case "logout": action = logout(request); break;
             case "register": action = "register"; break;
             case "profile": action = "profile"; break;
+            case "storyid": action = getStoryDetails(request);break;
             default: action = "main";
         }
         request.getRequestDispatcher(action + ".jsp").forward(request,response);
@@ -215,6 +226,23 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
     	 request.getSession().invalidate();
          return "login";
      }
+	
+	private String getStoryDetails(HttpServletRequest request){
+		Integer storyid = Integer.parseInt(request.getParameter("id"));
+		Story S = null;
+		
+		DAOdb db = null;
+	    try {
+	          db = new DAOdb();
+	        } catch (Exception e) {
+	         
+	         e.printStackTrace();
+	    }	
+	    
+	   S = db.getStorybyStoryId(storyid);
+	   request.getSession().setAttribute("story", S);
+	   return "story";
+	}
      
   
 }

@@ -45,7 +45,7 @@
 <h1>My Stories</h1>
 <ol>
 <c:forEach var="story" items="${stories}">
-  <li><a href="story.jsp?id=${story.id}">${story.title}</a></li>    
+  <li><a href="StoryServlet?id=${story.id}&action=storyid">${story.title}</a></li>    
 </c:forEach>
 </ol>
 </div>    

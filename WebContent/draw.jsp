@@ -25,24 +25,12 @@
 		style="border: 2px solid grey; cursor: crosshair; background-color: #fff;"></canvas>
 	<br>
 	<br>
-	<input type="button" id="btndownload" value="Save" />
+	StoryID:${story.id}
+	<input type="hidden" id ="hiddenstoryid" value= "${story.id}" />
+	<input type="button" id="btndownload" value="Save and Submit" />
 	<span class="saveCanvasbutton"> <a id="lnkcanvassave" href="#"
 		onclick="saveCanvas();"><input type="button" value="Download" /></a><br>
 	<br></span>
 	
-	begin=<%= session.getAttribute("passtitle") %>
-	<input type="hidden" id ="hiddenformtitle" value= "${passtitle}"/>
-    <input type="hidden" id ="hiddenformbgn" value= "${passbegin}"/>
-    <input type="hidden" id ="hiddenformmiddle" value="${passmiddle}"/>
-    <input type="hidden" id ="hiddenformend" value="${passend}"/>
-    <input type="hidden" id ="hiddenimagecontent" value="${passcanvas}"/>
-	<form id="formsubmitstory" role="form">
-     <!--   <div class="col-md-3" class = "form-group" id="submitstory" >-->
-            <label for ="storyend"><h3><i>Once submitted, you cannot edit your story!</i></h3></label><br>
-            <input type="button" value="Submit"/><span></span>
-     <!--    </div>-->
-     </form>
-     
-     
 </body>
 </html>
