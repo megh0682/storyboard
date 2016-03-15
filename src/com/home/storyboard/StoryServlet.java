@@ -34,13 +34,13 @@ public class StoryServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 	if (action == null) action = "login";    
     switch (action) {
+        case "upload": jsontostring = upload(request);break;
         case "login": jsontostring = login(request);break;
         case "createStory": jsontostring = createStory(request);break; 
         case "passtitle": jsontostring = passtitle(request);break;
         case "passbegin":jsontostring = passbegin(request);break;
         case "passmiddle":jsontostring = passmiddle(request);break;
         case "passend":jsontostring = passend(request);break;
-        case "upload": jsontostring = upload(request);break;
         default: jsontostring = homepage(request);break;
     	
     }

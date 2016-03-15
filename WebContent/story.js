@@ -194,7 +194,7 @@
 						 $.ajax({
 							  type: "POST",
 							  url: "StoryServlet",
-							  data: {contents: dataURL,storyid:hiddenid, action:"uploadcanvas"},
+							  data: {action:"upload", contents: dataURL,storyid:hiddenid},
 							  dataType: "json",
 							  success: function(json){
 								  alert("Success I am on story jsp page");
