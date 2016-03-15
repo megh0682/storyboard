@@ -194,13 +194,13 @@
 						 $.ajax({
 							  type: "POST",
 							  url: "StoryServlet",
-							  data: {action:"upload", contents: dataURL,storyid:hiddenid},
+							  data: {action:"storypic", contents: dataURL,storyid:hiddenid},
 							  dataType: "json",
 							  success: function(json){
 								  alert("Success I am on story jsp page");
 								  if (json.storyjsp) {
 							            // data.redirect contains the string URL to redirect to
-							            window.location.href = json.storyjsp;
+							            window.location.href = "story.jsp";
 							      }else{
 							            // data.form contains the HTML for the replacement form
 							            alert(json.error);
