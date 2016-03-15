@@ -87,7 +87,7 @@ public class DAOdb {
 		 Integer uid =user.getId();
 		 List<Story> storyList=null;
 		 try{
-			    GenericRawResults<String[]> stories = storyDAO.queryRaw("select count(*) from stories where authorid =1");
+			    GenericRawResults<String[]> stories = storyDAO.queryRaw("select count(*) from stories where authorid =" + uid);
 		   	     // there should be 1 result
 				List<String[]> results = stories.getResults();
 				// the results array should have 1 value
@@ -160,7 +160,7 @@ public class DAOdb {
 		Integer uid = user.getId();
 		try{
      		// find out how many orders account-id #10 has
-			GenericRawResults<String[]> rawResults = profileDAO.queryRaw("select count(*) from profiles where userid = 1");
+			GenericRawResults<String[]> rawResults = profileDAO.queryRaw("select count(*) from profiles where userid ="+uid);
 			// there should be 1 result
 			List<String[]> results = rawResults.getResults();
 			// the results array should have 1 value

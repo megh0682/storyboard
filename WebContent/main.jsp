@@ -25,7 +25,7 @@
 <div class="row">
 
 <div class="col-md-4" class = "form-group">
-<h1>Hello ${user.username} with  ${user.id} ! </h1>
+<h1>Hello ${user.username}! </h1>
 <c:choose>
 <c:when test="${user ne null}">
 <label for="fn"> First-Name: </label><input type="text" disabled class="form-control" value = ${profile.firstname}>
@@ -59,14 +59,12 @@
 </p>
  </c:when>
 <c:otherwise>
- <p><a href="StoryServlet?action=login">Log in to Storyboard</a> |
+ <p><a href="StoryServlet?action=login">Log in to Storyboard</a> 
  <a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
  </p>
 </c:otherwise>
 </c:choose>
 
-<footer>
- love reading stories & love writing stories & love sharing stories
-</footer>
+<footer> Read, Write and Share</footer>
 </body>
 </html>

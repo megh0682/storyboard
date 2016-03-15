@@ -23,16 +23,15 @@
 <title>${story.title}</title>
 </head>
 <body>
-	<header>
-		<h1>${story.title}</h1>
-	</header>
+<header>
+  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+  <h1>My Story Board</h1>
+</header>
 	<div class="container">
 		<div class="row">
-
-			<div class="col-md-4" class="form-group">
-				<h1>Hello ${user.username} with userid as ${user.id} }!</h1>
 				<c:choose>
 					<c:when test="${(user ne null) && (story ne null)}">
+				     <b><h3><center>${story.title}</center></h3></b>
 						<p>${story.firstPart}</p>
 						<p>${story.middlePart}</p>
 						<p>${story.lastPart}</p>
@@ -48,7 +47,13 @@
 						</p>
 					</c:otherwise>
 				</c:choose>
-				<footer> love reading stories & love writing stories & love
-					sharing stories </footer>
+	  <a href="StoryServlet?action=main">Homepage</a> |
+      <a href="StoryServlet?action=logout">Logout</a>
+				
+	</div>
+	</div>
+
+				
+				<footer>Read, Write and Share</footer>
 </body>
 </html>

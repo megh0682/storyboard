@@ -17,6 +17,10 @@
 <title>Draw on Canvas</title>
 </head>
 <body onload="newCanvas();">
+<header>
+  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+  <h1>My Story Board</h1>
+</header>
 	<label for="canvas"><h3>
 			<i>Describe your story on a Canvas:</i>
 		</h3></label>
@@ -29,8 +33,10 @@
 	<input type="hidden" id ="hiddenstoryid" value= "${story.id}" />
 	<input type="button" id="btndownload" value="Save and Submit" />
 	<span class="saveCanvasbutton"> <a id="lnkcanvassave" href="#"
-		onclick="saveCanvas();"><input type="button" value="Download" /></a><br>
-	<br></span>
+		onclick="saveCanvas();"><input type="button" value="Download" /></a></span><span><input type="button" id="btnclearcanvas" value="Clear Canvas" onclick="newCanvas();"/></span><br>
+	<a href="StoryServlet?action=main">Homepage</a> |
+    <a href="StoryServlet?action=logout">Logout</a>	
+	<footer>Read, Write and Share</footer>
 	
 </body>
 </html>

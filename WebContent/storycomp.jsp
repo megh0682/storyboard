@@ -14,6 +14,10 @@
 <title>Create a Story</title>
 </head>
 <body>
+<header>
+  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+  <h1>My Story Board</h1>
+</header>
 <div class="container">
      <!--     <form id="myname" role="form">
 	 <div class="col-md-4" class = "form-group">
@@ -60,10 +64,15 @@
             <input type="button" value="Save"/><span></span><span><input type="button" value="Cancel"/></span>
       <!--   </div>-->
      </form>
+     <br><br>
 
-     <a href="#" id ="lnktosubmit"><input type="button" id="buttonCanvas" value ="Next"/></a>
+     <center><a href="#" id ="lnktosubmit"><input type="button" id="buttonCanvas" value ="Next"/></a></center>
+      <a href="StoryServlet?action=main">Homepage</a> |
+      <a href="StoryServlet?action=logout">Logout</a>
          
 </div>
 </div>  
+
+<footer>Read, Write and Share</footer>
 </body>
 </html>
