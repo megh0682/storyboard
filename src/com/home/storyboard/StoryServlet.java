@@ -40,7 +40,7 @@ public class StoryServlet extends HttpServlet {
         case "passbegin":jsontostring = passbegin(request);break;
         case "passmiddle":jsontostring = passmiddle(request);break;
         case "passend":jsontostring = passend(request);break;
-        case "uploadcanvas": jsontostring = uploadcanvas(request);break;
+        case "upload": jsontostring = upload(request);break;
         default: jsontostring = homepage(request);break;
     	
     }
@@ -170,20 +170,21 @@ private String homepage(HttpServletRequest request){
 	return json.toString();
 }
 
-private String uploadcanvas(HttpServletRequest request){
+private String upload(HttpServletRequest request){
 	
-	String image_contents = request.getParameter("contents");
-	Integer storyid = Integer.parseInt(request.getParameter("storyid"));
-
 	DAOdb db = null;
     try {
           db = new DAOdb();
-        } catch (Exception e) {
-         
+        }catch (Exception e) {         
          e.printStackTrace();
-    }	
+        }	
 	
-	if((image_contents!=null) && (storyid!=null)){
+	String image_contents = request.getParameter("contents");
+	Integer storyid = Integer.parseInt(request.getParameter("storyid"));
+	System.out.println(image_contents);
+	System.out.println(storyid);
+
+	//if((image_contents!=null) && (storyid!=null)){
 		System.out.println(image_contents + storyid);
         image_contents = image_contents.substring("data:image/png;base64,".length());
         byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
@@ -198,7 +199,7 @@ private String uploadcanvas(HttpServletRequest request){
 			String error = e.getMessage().toString();
             json.put("error",error);
 		}
-      }
+      //}
 		   
 			return json.toString();
 
