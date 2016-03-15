@@ -47,6 +47,43 @@ public class StoryServlet extends HttpServlet {
     out.write(jsontostring);
 }//doPost method ends here.
 	
+//upload method
+	
+private String upload(HttpServletRequest request){
+		
+		DAOdb db = null;
+	    try {
+	          db = new DAOdb();
+	        }catch (Exception e) {         
+	         e.printStackTrace();
+	        }	
+		
+		String image_contents = request.getParameter("contents");
+		Integer storyid = Integer.parseInt(request.getParameter("storyid"));
+		System.out.println(image_contents);
+		System.out.println(storyid);
+
+		//if((image_contents!=null) && (storyid!=null)){
+			System.out.println(image_contents + storyid);
+	        image_contents = image_contents.substring("data:image/png;base64,".length());
+	        byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
+	        InputStream is = new ByteArrayInputStream(decodedBytes);
+		    try {
+				db.updateStoryPic(storyid, "png", is);
+				String url = "story.jsp";
+				//request.getSession().setAttribute("story", S);
+				json.put("storyjsp", url);
+				} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				String error = e.getMessage().toString();
+	            json.put("error",error);
+			}
+	      //}
+			   
+				return (json.toString());
+
+}
+	
 //login post method	
 private String login(HttpServletRequest request){
 		String username = request.getParameter("name");
@@ -144,7 +181,6 @@ private String passtitle(HttpServletRequest request){
 
 }
 
-
 private String passbegin(HttpServletRequest request){
 	request.getSession().setAttribute("passbegin", request.getParameter("storyBegin"));
 	json.put("success", "success");
@@ -170,40 +206,7 @@ private String homepage(HttpServletRequest request){
 	return json.toString();
 }
 
-private String upload(HttpServletRequest request){
-	
-	DAOdb db = null;
-    try {
-          db = new DAOdb();
-        }catch (Exception e) {         
-         e.printStackTrace();
-        }	
-	
-	String image_contents = request.getParameter("contents");
-	Integer storyid = Integer.parseInt(request.getParameter("storyid"));
-	System.out.println(image_contents);
-	System.out.println(storyid);
-
-	//if((image_contents!=null) && (storyid!=null)){
-		System.out.println(image_contents + storyid);
-        image_contents = image_contents.substring("data:image/png;base64,".length());
-        byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
-        InputStream is = new ByteArrayInputStream(decodedBytes);
-	    try {
-			db.updateStoryPic(storyid, "png", is);
-			String url = "story.jsp";
-			//request.getSession().setAttribute("story", S);
-			json.put("storyjsp", url);
-			} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			String error = e.getMessage().toString();
-            json.put("error",error);
-		}
-      //}
-		   
-			return json.toString();
-
-}
+/*******************************************************************************************************************************************************/
 
 
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
