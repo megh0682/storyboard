@@ -70,6 +70,17 @@ public class DAOdb {
 		 
 	 }
 	 
+	 public void updateStoryPic(int storyid, String mime, InputStream is) throws SQLException{
+		 try{
+         UpdateBuilder<Story, Integer> updateBuilder = storyDAO.updateBuilder();
+         updateBuilder.updateColumnValue("storypic", is);
+         updateBuilder.where().eq("id",storyid);
+         updateBuilder.update();
+		 }catch(Exception e){
+			 lastError = e.getMessage().toString();
+		 }
+	 }
+	 
 	 public List<Story> getStoriesbyUsername(String username) {
 		 String uname =username;
 		 User user = getUserbyUsername(uname);
@@ -203,16 +214,7 @@ public class DAOdb {
 				return user;
 		    }
 	 
-	 public void updateStoryPic(int storyid, String mime, InputStream is) throws SQLException{
-		 try{
-         UpdateBuilder<Story, Integer> updateBuilder = storyDAO.updateBuilder();
-         updateBuilder.updateColumnValue("storypic", is);
-         updateBuilder.where().eq("id",storyid);
-         updateBuilder.update();
-		 }catch(Exception e){
-			 lastError = e.getMessage().toString();
-		 }
-	 }
+
 			 
 	public void close() {
 		 if (connectionSource != null) {

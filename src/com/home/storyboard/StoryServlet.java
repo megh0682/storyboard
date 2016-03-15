@@ -34,14 +34,23 @@ public class StoryServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 	if (action == null) action = "login";    
     switch (action) {
-        case "upload": jsontostring = upload(request);break;
+        case "storypic": jsontostring = upload(request);break;
+        
         case "login": jsontostring = login(request);break;
+        
         case "createStory": jsontostring = createStory(request);break; 
+        
         case "passtitle": jsontostring = passtitle(request);break;
+        
         case "passbegin":jsontostring = passbegin(request);break;
+        
         case "passmiddle":jsontostring = passmiddle(request);break;
+        
         case "passend":jsontostring = passend(request);break;
-        default: jsontostring = homepage(request);break;
+        
+        case "upload": jsontostring = upload(request);break;
+        
+        default       : jsontostring = homepage(request);
     	
     }
     out.write(jsontostring);
@@ -50,38 +59,36 @@ public class StoryServlet extends HttpServlet {
 //upload method
 	
 private String upload(HttpServletRequest request){
-		
-		DAOdb db = null;
+	Story S=null;
+	String error;
+	String image_contents = request.getParameter("contents");
+	Integer storyid = Integer.parseInt(request.getParameter("storyid"));
+	System.out.println(image_contents);
+	System.out.println(storyid);
+	DAOdb db = null;
 	    try {
 	          db = new DAOdb();
 	        }catch (Exception e) {         
 	         e.printStackTrace();
 	        }	
 		
-		String image_contents = request.getParameter("contents");
-		Integer storyid = Integer.parseInt(request.getParameter("storyid"));
-		System.out.println(image_contents);
-		System.out.println(storyid);
-
-		//if((image_contents!=null) && (storyid!=null)){
-			System.out.println(image_contents + storyid);
-	        image_contents = image_contents.substring("data:image/png;base64,".length());
-	        byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
-	        InputStream is = new ByteArrayInputStream(decodedBytes);
-		    try {
-				db.updateStoryPic(storyid, "png", is);
-				String url = "story.jsp";
-				//request.getSession().setAttribute("story", S);
-				json.put("storyjsp", url);
-				} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				String error = e.getMessage().toString();
-	            json.put("error",error);
-			}
-	      //}
-			   
-				return (json.toString());
-
+//if((image_contents!=null) && (storyid!=null)){
+System.out.println(image_contents + storyid);
+image_contents = image_contents.substring("data:image/png;base64,".length());
+byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
+InputStream is = new ByteArrayInputStream(decodedBytes);
+try{
+   db.updateStoryPic(storyid, "png", is);
+   String url = "story.jsp";
+   json.put("storyjsp", url);
+   S=db.getStorybyStoryId(storyid);
+   request.getSession().setAttribute("story", S);
+//}
+}catch(SQLException e){
+	error= e.getMessage().toString();
+	json.put("error",error);
+}
+return (json.toString());
 }
 	
 //login post method	
@@ -181,6 +188,7 @@ private String passtitle(HttpServletRequest request){
 
 }
 
+@SuppressWarnings("unchecked")
 private String passbegin(HttpServletRequest request){
 	request.getSession().setAttribute("passbegin", request.getParameter("storyBegin"));
 	json.put("success", "success");
