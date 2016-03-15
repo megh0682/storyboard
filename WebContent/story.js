@@ -221,7 +221,7 @@
 				   	
 /**************************************************************************************************************************************************************/
 					$("#lnktosubmit").click(function(){
-						 alert("I m in lnktosubmit");
+						 alert("submitting a story and on my way to draw jsp");
 						 var formTitle = $("#formTitle textarea").val();
 						 var formbgn = $("#formbgn textarea").val();
 						 var formmiddle =$("#formmiddle textarea").val();
