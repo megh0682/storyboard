@@ -2,18 +2,22 @@ package com.home.storyboard;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -115,7 +119,7 @@ private String login(HttpServletRequest request){
 	                request.getSession().setAttribute("user", user);
 	               	Profile userprof = db.getProfilebyUsername(username);
 	               	if(userprof!=null){
-	               	      System.out.println(userprof.getFirstname() + " "+ userprof.getLastname());
+	               	      System.out.println(userprof.getFirstname() + " "+ userprof.getLastname() + "profile[ic:" +userprof.getProfpic() + ""+userprof.getEmail());
 	               	      request.getSession().setAttribute("profile", userprof);
 	                      List <Story> stories = db.getStoriesbyUsername(username);
 	                      System.out.println(stories.get(0) );
@@ -222,16 +226,18 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		String action = request.getParameter("action");   
         if (action == null) action = "main";
         switch (action) {
-            case "main": action =  "main";break;
-            case "createStory": action = "storycomp";break;
-            case "login": action = "login"; break;
-            case "logout": action = logout(request); break;
-            case "register": action = "register"; break;
-            case "profile": action = "profile"; break;
-            case "storyid": action = getStoryDetails(request);break;
-            default: action = "main";
+            case "main": request.getRequestDispatcher(action + ".jsp").forward(request,response); break;
+            case "createStory": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "canvas":getcanvas(request,response);break;
+            case "storypdf" : storypdf(request,response);break;
+            case "login": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "logout": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "register": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "profile": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "storyid": action = getStoryDetails(request);request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            default: action = "main";request.getRequestDispatcher(action + ".jsp").forward(request,response);
         }
-        request.getRequestDispatcher(action + ".jsp").forward(request,response);
+        
     }
 	
 	private String logout(HttpServletRequest request) {
@@ -255,6 +261,120 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	   request.getSession().setAttribute("story", S);
 	   return "story";
 	}
+	
+	private void getcanvas(HttpServletRequest request, HttpServletResponse response) {
+	    	DAOdb db = null;
+	    	Story S = null;
+		    String storyid  = request.getParameter("for");
+	        Integer sid = 0;
+	        try
+	        {
+	            if(storyid != null)
+	              sid = Integer.parseInt(storyid);
+	        }
+	        catch (NumberFormatException e)
+	        {
+	        	sid = 0;
+	        }
+	        
+	        
+		    try {
+		          db = new DAOdb();
+		        } catch (Exception e) {
+		         
+		         e.printStackTrace();
+		    }	
+		    
+		    S = db.getStorybyStoryId(sid);
+		    byte[] storypic = S.getStorypic();
+	        if (storypic == null) {
+	            response.setStatus(404);
+	            return;
+	        }
+	        try {
+	        	Base64 base64 = new Base64();
+	            ByteArrayInputStream bis = new ByteArrayInputStream(storypic);
+	            BufferedImage image = ImageIO.read(bis);
+	            bis.close();
+	            ImageIO.write(image, "png", new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvas.png"));
+	        	response.setContentType("image/png");
+	            response.getWriter().write("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvas.png");
+	        } catch (IOException ioe) {
+	            request.setAttribute("flash", ioe.getMessage());
+	        }
+	    }
+	
+	
+	private void storypdf(HttpServletRequest request, HttpServletResponse response) {
+    	DAOdb db = null;
+    	Story S = null;
+	    String storyid  = request.getParameter("for");
+        Integer sid = 0;
+        try
+        {
+            if(storyid != null)
+              sid = Integer.parseInt(storyid);
+        }
+        catch (NumberFormatException e)
+        {
+        	sid = 0;
+        }
+        
+        
+	    try {
+	          db = new DAOdb();
+	        } catch (Exception e) {
+	         
+	         e.printStackTrace();
+	    }	
+	    
+	    S = db.getStorybyStoryId(sid);
+	    StoryPdf pdf =new StoryPdf(S.getTitle(),S.getFirstPart(),S.getMiddlePart(),S.getLastPart());
+	    pdf.createPdf("mypdf", "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\defaultstorypic.png");
+	    
+	    try {
+	    	// reads input file from an absolute path
+	        String filePath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\temp.pdf";
+	        File downloadFile = new File(filePath);
+	        FileInputStream inStream = new FileInputStream(downloadFile);
+	        
+	        // obtains ServletContext
+	        ServletContext context = getServletContext();
+	         
+	        // gets MIME type of the file
+	        String mimeType = context.getMimeType(filePath);
+	        if (mimeType == null) {        
+	            // set to binary type if MIME mapping not found
+	            mimeType = "application/octet-stream";
+	        }
+	        System.out.println("MIME type: " + mimeType);
+	         
+	        // modifies response
+	        response.setContentType(mimeType);
+	        response.setContentLength((int) downloadFile.length());
+	         
+	        // forces download
+	        String headerKey = "Content-Disposition";
+	        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+	        response.setHeader(headerKey, headerValue);
+	        
+	        // obtains response's output stream
+	        OutputStream outStream = response.getOutputStream();
+	         
+	        byte[] buffer = new byte[4096];
+	        int bytesRead = -1;
+	         
+	        while ((bytesRead = inStream.read(buffer)) != -1) {
+	            outStream.write(buffer, 0, bytesRead);
+	        }
+	         
+	        inStream.close();
+	        outStream.close();     
+	        
+        } catch (IOException ioe) {
+            request.setAttribute("flash", ioe.getMessage());
+        }
+    }
      
   
 }

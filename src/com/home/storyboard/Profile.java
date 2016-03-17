@@ -39,6 +39,14 @@ implements Serializable {
         this.lastname = lastname;
         this.email = email;
     }
+    
+    public Profile(Integer id, String firstname, String lastname, String email,Integer userid) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.userid = userid;
+    }
 
     public Integer getId() {
         return this.id;
@@ -56,7 +64,7 @@ implements Serializable {
         return this.email;
     }
 
-    public byte[] getProfPic() {
+    public byte[] getProfpic() {
         return this.profpic;
     }
 
@@ -76,7 +84,7 @@ implements Serializable {
         this.email = email;
     }
 
-    public void setProfPic(byte[] profpic) {
+    public void setProfpic(byte[] profpic) {
         this.profpic = profpic;
     }
 

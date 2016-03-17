@@ -14,13 +14,21 @@
 <script type="text/javascript" src = "http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script type="text/javascript" src="story.js"></script>
 <script type="text/javascript" src="cis.js"></script>
-<title>Hello ${user.username}</title>
+<title>Hello ${profile.firstname}</title>
 </head>
 <body>
 <header>
-  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
-  <h1>My Story Board</h1>
+<c:choose>
+     <c:when test="${not empty profile.profpic}">
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     </c:when>
+     <c:otherwise>
+     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     </c:otherwise>
+ </c:choose>
+<h1>My Story Board</h1>
 </header>
+
 <div class="container">
 <div class="row">
 

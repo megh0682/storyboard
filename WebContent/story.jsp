@@ -23,37 +23,47 @@
 <title>${story.title}</title>
 </head>
 <body>
+
 <header>
   <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
   <h1>My Story Board</h1>
 </header>
-	<div class="container">
-		<div class="row">
-				<c:choose>
-					<c:when test="${(user ne null) && (story ne null)}">
-				     <b><h3><center>${story.title}</center></h3></b>
-						<p>${story.firstPart}</p>
-						<p>${story.middlePart}</p>
-						<p>${story.lastPart}</p>
-					<!-- 	<c:if test="${story.storypic ne null}">
-                           <p>${story.storypic}</p> 
-                        </c:if>
-					 -->	
-					</c:when>
-					<c:otherwise>
-						<p>
-							<a href="StoryServlet?action=login">Log in to Storyboard</a> | <a
-								href="StoryServlet?action=register">I'm sold. Sign me up!</a>
-						</p>
-					</c:otherwise>
-				</c:choose>
-	  <a href="StoryServlet?action=main">Homepage</a> |
-      <a href="StoryServlet?action=logout">Logout</a>
-				
-	</div>
-	</div>
 
-				
-				<footer>Read, Write and Share</footer>
+<div class="container">
+<div class="row">
+
+<c:choose>
+
+<c:when test="${(user ne null) && (story ne null)}">
+<b><center>${story.title}</center></b>
+<p>${story.firstPart}</p>
+<p>${story.middlePart}</p>
+<p>${story.lastPart}</p>
+<p><c:choose>
+     <c:when test="${not empty story.storypic}">
+     <img src="StoryServlet?action=canvas&for=${story.id}"/>
+     </c:when>
+     <c:otherwise>
+     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     </c:otherwise>
+  </c:choose>
+</p>			
+<p><a href="StoryServlet?action=storypdf&for=${story.id}">Download as pdf</a></p>
+
+</c:when>
+<c:otherwise>
+<p><a href="StoryServlet?action=login">Log in to Storyboard</a> 
+   <a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
+</p>
+</c:otherwise>
+
+</c:choose>
+
+<a href="StoryServlet?action=main">Homepage</a> 
+<a href="StoryServlet?action=logout">Logout</a>
+			
+</div>
+</div>
+<footer>Read, Write and Share</footer>
 </body>
 </html>
