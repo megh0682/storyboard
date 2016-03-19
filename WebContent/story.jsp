@@ -22,7 +22,7 @@
 <script type="text/javascript" src="cis.js"></script>
 <title>${story.title}</title>
 </head>
-<body>
+<body onload = "getCanvas();">
 
 <header>
   <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />

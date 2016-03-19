@@ -1,8 +1,12 @@
 /**
  * Story content post forms using jquery ajax and validation of UI inputs.
  */
- $(document).ready(function(){
+ $(document).ready(function(){	 
 	 
+	 
+	 
+	 
+/*************************************************************************************/
 	$("#myname input[value=Login]").click(function(){
 	var name = $("#myname input[type=text]").val();
 	var password = $("#myname input[type=password]").val();
@@ -274,12 +278,5 @@
 					
 					
 					});   	
-				  
 					
-						
-					
-
-				
-				
-				
-});
+				});

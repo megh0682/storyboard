@@ -1,6 +1,7 @@
 package com.home.storyboard;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,10 +9,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Base64.Decoder;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
@@ -70,19 +75,23 @@ private String upload(HttpServletRequest request){
 	System.out.println(image_contents);
 	System.out.println(storyid);
 	DAOdb db = null;
-	    try {
+	try {
 	          db = new DAOdb();
-	        }catch (Exception e) {         
+	    }catch (Exception e) {         
 	         e.printStackTrace();
-	        }	
+	    }	
 		
 //if((image_contents!=null) && (storyid!=null)){
 System.out.println(image_contents + storyid);
 image_contents = image_contents.substring("data:image/png;base64,".length());
-byte[] decodedBytes = DatatypeConverter.parseBase64Binary(image_contents);
-InputStream is = new ByteArrayInputStream(decodedBytes);
+//System.out.println(image_contents);
+//byte[] bImg64 = image_contents.getBytes();
+byte[] asBytes = java.util.Base64.getDecoder().decode(image_contents);
+System.out.println(new String(asBytes));
+//byte[] decodedBytes = Base64.decodeBase64(bImg64);
+//InputStream is = new ByteArrayInputStream(asBytes);
 try{
-   db.updateStoryPic(storyid, "png", is);
+   db.updateStoryPic(storyid, "png", asBytes);
    String url = "story.jsp";
    json.put("storyjsp", url);
    S=db.getStorybyStoryId(storyid);
@@ -219,30 +228,28 @@ private String homepage(HttpServletRequest request){
 }
 
 /*******************************************************************************************************************************************************/
-
-
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String action = request.getParameter("action");   
         if (action == null) action = "main";
         switch (action) {
-            case "main": request.getRequestDispatcher(action + ".jsp").forward(request,response); break;
-            case "createStory": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "main": request.getRequestDispatcher("main" + ".jsp").forward(request,response); break;
+            case "createStory": request.getRequestDispatcher("storycomp" + ".jsp").forward(request,response);break;
             case "canvas":getcanvas(request,response);break;
             case "storypdf" : storypdf(request,response);break;
-            case "login": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
-            case "logout": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
-            case "register": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
-            case "profile": request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "login": request.getRequestDispatcher("login" + ".jsp").forward(request,response);break;
+            case "logout": logout(request,response);break;
+            case "register": request.getRequestDispatcher("register" + ".jsp").forward(request,response);break;
+            case "profile": request.getRequestDispatcher("profile" + ".jsp").forward(request,response);break;
             case "storyid": action = getStoryDetails(request);request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
-            default: action = "main";request.getRequestDispatcher(action + ".jsp").forward(request,response);
+            default: action = "main";request.getRequestDispatcher("main" + ".jsp").forward(request,response);
         }
         
     }
 	
-	private String logout(HttpServletRequest request) {
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	 request.getSession().invalidate();
-         return "login";
+    	 request.getRequestDispatcher("login" + ".jsp").forward(request,response);
      }
 	
 	private String getStoryDetails(HttpServletRequest request){
@@ -267,6 +274,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	    	Story S = null;
 		    String storyid  = request.getParameter("for");
 	        Integer sid = 0;
+	      
 	        try
 	        {
 	            if(storyid != null)
@@ -291,16 +299,35 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	            response.setStatus(404);
 	            return;
 	        }
-	        try {
-	        	Base64 base64 = new Base64();
-	            ByteArrayInputStream bis = new ByteArrayInputStream(storypic);
-	            BufferedImage image = ImageIO.read(bis);
-	            bis.close();
-	            ImageIO.write(image, "png", new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvas.png"));
+	        
+	        try{
+	        	
+	        	
+	        	/*StringBuilder sb = new StringBuilder();
+	        	sb.append("data:image/png;base64,");
+	        	sb.append(" ");
+	        	sb.append(java.util.Base64.getEncoder().encodeToString(storypic));
+	        	String newString = sb.toString();
+	        	System.out.println("base64encoded:" +newString);	
 	        	response.setContentType("image/png");
-	            response.getWriter().write("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvas.png");
-	        } catch (IOException ioe) {
-	            request.setAttribute("flash", ioe.getMessage());
+	        	response.getWriter().println(newString);*/
+
+
+	        	
+	        	//byte[] imageBytes = java.util.Base64.getEncoder().encode(storypic);
+	        	String imageString = java.util.Base64.getEncoder().encodeToString(storypic);
+	        	byte[]decodedbytes = java.util.Base64.getDecoder().decode(imageString);
+	        	// convert byte array back to BufferedImage
+				InputStream in = new ByteArrayInputStream(decodedbytes);
+				BufferedImage bImageFromConvert = ImageIO.read(in);
+				ImageIO.write(bImageFromConvert, "png", new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvasforpdf.png"));
+	        	response.setContentType("image/png");
+	        	//response.setContentLength(decodedbytes.length);
+	        	response.getOutputStream().write(decodedbytes);
+	        	     	
+	        	
+	        } catch (IOException e) {
+	        	e.getMessage().toString();
 	        }
 	    }
 	
@@ -329,8 +356,19 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	    }	
 	    
 	    S = db.getStorybyStoryId(sid);
+	    
+	    String filename = "" + S.getId()+S.getAuthorid()+"canvas"+".png";
+  	    String oldfilepath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\" + filename;
+	    File oldfile = new File(oldfilepath);
+		if(oldfile.exists() && oldfile.isFile()) {
+			oldfile.delete();
+		}
+		
+		String filepath = CreateCanvasImage(S.getId(),"png");
+		
+	    
 	    StoryPdf pdf =new StoryPdf(S.getTitle(),S.getFirstPart(),S.getMiddlePart(),S.getLastPart());
-	    pdf.createPdf("mypdf", "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\defaultstorypic.png");
+	    pdf.createPdf("mypdf", filepath);
 	    
 	    try {
 	    	// reads input file from an absolute path
@@ -375,6 +413,43 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             request.setAttribute("flash", ioe.getMessage());
         }
     }
+	
+	
+	private String CreateCanvasImage(Integer storyid, String mimetype){
+		
+		DAOdb db = null;
+    	Story S = null;
+    	String filepath = null;
+    	
+	           
+	    try {
+	          db = new DAOdb();
+	        } catch (Exception e) {
+	         
+	         e.printStackTrace();
+	    }	
+	    
+	    S = db.getStorybyStoryId(storyid);
+	    byte[] storypic = S.getStorypic();
+        if (storypic == null) {
+            filepath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\defaultstorypic.png";
+        }else{
+              try{
+            	  String filename = "" + S.getId()+S.getAuthorid()+"canvas"+".png";
+            	  filepath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\" + filename;
+        	      String imageString = java.util.Base64.getEncoder().encodeToString(storypic);
+        	      byte[]decodedbytes = java.util.Base64.getDecoder().decode(imageString);
+        	      // convert decoded byte array to BufferedImage
+        	      InputStream in = new ByteArrayInputStream(decodedbytes);
+        	      BufferedImage bImageFromConvert = ImageIO.read(in);
+        	      ImageIO.write(bImageFromConvert, "png", new File(filepath));
+        	     }catch(IOException e) {
+        	      e.getMessage().toString();
+                 }
+        }
+        
+		return filepath;
+	}
      
   
 }

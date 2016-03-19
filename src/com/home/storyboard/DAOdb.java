@@ -70,10 +70,10 @@ public class DAOdb {
 		 
 	 }
 	 
-	 public void updateStoryPic(int storyid, String mime, InputStream is) throws SQLException{
+	 public void updateStoryPic(int storyid, String mime, byte[] barray) throws SQLException{
 		 try{
          UpdateBuilder<Story, Integer> updateBuilder = storyDAO.updateBuilder();
-         updateBuilder.updateColumnValue("storypic", is);
+         updateBuilder.updateColumnValue(Story.PICTURE_FIELD_NAME, barray);
          updateBuilder.where().eq("id",storyid);
          updateBuilder.update();
 		 }catch(Exception e){
@@ -91,9 +91,9 @@ public class DAOdb {
 		   	     // there should be 1 result
 				List<String[]> results = stories.getResults();
 				// the results array should have 1 value
-				Integer usercount = results.size();
+				Integer storycount = results.size();
 				// this should print the number of orders that have this account-id
-				if(usercount<=0){
+				if(storycount<=0){
 					System.out.println("No story exist for " +username);
 				  }else{
 					   storyList = storyDAO.queryBuilder().where().eq(Story.AUTHORID_FIELD_NAME, uid).query();
