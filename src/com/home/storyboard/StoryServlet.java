@@ -1,4 +1,5 @@
 package com.home.storyboard;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,23 +17,31 @@ import java.util.Base64.Decoder;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
 
 import javax.imageio.ImageIO;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import javax.xml.bind.DatatypeConverter;
 
+@MultipartConfig 
 public class StoryServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	private static final int IMG_WIDTH = 80;
+	private static final int IMG_HEIGHT = 65;
 	JSONObject json = new JSONObject();  
 	String jsontostring=null;		
 	String action =null;
@@ -58,6 +67,12 @@ public class StoryServlet extends HttpServlet {
         case "passend":jsontostring = passend(request);break;
         
         case "upload": jsontostring = upload(request);break;
+        
+        case "editprofile":jsontostring = profileEdit(request);break;
+        
+        case "editprofilepic":jsontostring = editprofilepic(request,response);break;
+        
+        case "register": jsontostring = register(request);break;
         
         default       : jsontostring = homepage(request);
     	
@@ -130,18 +145,17 @@ private String login(HttpServletRequest request){
 	               	if(userprof!=null){
 	               	      System.out.println(userprof.getFirstname() + " "+ userprof.getLastname() + "profile[ic:" +userprof.getProfpic() + ""+userprof.getEmail());
 	               	      request.getSession().setAttribute("profile", userprof);
+	               	   if(db.storyExists(username)){
 	                      List <Story> stories = db.getStoriesbyUsername(username);
 	                      System.out.println(stories.get(0) );
-	               	      if(!stories.isEmpty()){
-	               	    	  request.getSession().setAttribute("stories", stories);
-	               	    	  Gson gson = new Gson();
-	               	    	  String jsonStories = gson.toJson(stories);
-	               	          System.out.println("jsonStories = " + jsonStories);
-	               	    	  
+	               	      request.getSession().setAttribute("stories", stories);
+	               	      Gson gson = new Gson();
+	               	      String jsonStories = gson.toJson(stories);
+	               	      System.out.println("jsonStories = " + jsonStories);
 	               	      }else{
-	               	    	request.getSession().setAttribute("stories", stories);
+	               	    	 json.put("storycount", "none");
 	               	      }
-	                      String url ="main.jsp";
+	               	      String url ="main.jsp";
 	                      json.put("redirect",url);
 	               	}else{
 	               	     String error = db.getLastError();
@@ -149,7 +163,7 @@ private String login(HttpServletRequest request){
 	               	}
 	                
 	            }
-		   }else{
+		    }else{
 			    System.out.println("Username or password cannot be validated.");
 	            String error = "Invalid user name or password";
 	            json.put("error",error);
@@ -188,6 +202,8 @@ private String createStory(HttpServletRequest request){
 				db.addStory(S);		
 			String url = "draw.jsp";
 			request.getSession().setAttribute("story", S);
+			List <Story> stories = db.getStoriesbyUsername(user.getUsername());
+            request.getSession().setAttribute("stories", stories);
 			json.put("redirect", url);
 		   }
      }
@@ -227,35 +243,217 @@ private String homepage(HttpServletRequest request){
 	return json.toString();
 }
 
+private String profileEdit(HttpServletRequest request){
+	DAOdb db = null;
+	Integer profileid = 0;
+	String profid = request.getParameter("profileid");	
+	String firstname = request.getParameter("fn");
+	String lastname = request.getParameter("ln");
+	String email = request.getParameter("email");
+    try {
+          db = new DAOdb();
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+    try{
+        if(profid != null)
+          profileid = Integer.parseInt(profid);
+       }catch (NumberFormatException e){
+    	profileid = 0;
+       }
+    if((firstname!=null) || (!firstname.isEmpty())){
+		db.updateProfilefn(firstname, profileid);
+	}
+	
+	if((lastname!=null) || (!lastname.isEmpty())){
+		db.updateProfileln(lastname, profileid);
+	}
+	
+	if((email!=null) || (!email.isEmpty())){
+		db.updateProfileemail(email, profileid);
+	}
+	
+	json.put("profileurl", "profile.jsp");
+    return json.toString();
+    
+}
+
+/***
+ *  Edit profile picture method
+ * @throws IOException 
+ * @throws ServletException */
+private String editprofilepic(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
+	DAOdb db = null;
+	Integer profileid = 0;
+	String error = null;
+	String flash=null;
+	String pid = request.getParameter("profilepicid");
+	Part filepart = null;
+	try {
+          db = new DAOdb();
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+    try{
+        if(pid != null)
+          profileid = Integer.parseInt(pid);
+       }catch (NumberFormatException e){
+    	profileid = 0;
+       }
+    try {
+		  filepart = request.getPart("file");
+		  String filename = getFileName(filepart);
+	      InputStream filecontent = filepart.getInputStream();
+	      if(filecontent.available()!= -1 && filepart.getSize()!=0L){
+	    	byte[] bytes = IOUtils.toByteArray(filecontent);
+	    	db.updateProfilepic(bytes, profileid);
+	    	json.put("profilepicurl","profile.jsp");
+	      }else{
+	    	json.put("error","file is empty.Please select your file");
+	      }
+		}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			error = e.getMessage().toString();
+			json.put("error",error);
+		}catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			error = e.getMessage().toString();
+			json.put("error",error);
+		}
+	
+	return json.toString();
+}
+
+/**
+ * Utility method to get file name from HTTP header content-disposition
+ */
+private String getFileName(Part part) {
+    String contentDisp = part.getHeader("content-disposition");
+    System.out.println("content-disposition header= "+contentDisp);
+    String[] tokens = contentDisp.split(";");
+    for (String token : tokens) {
+        if (token.trim().startsWith("filename")) {
+            return token.substring(token.indexOf("=") + 2, token.length()-1);
+        }
+    }
+    return "";
+}
+
+/**
+ * register a new user method
+ **/
+
+private String register(HttpServletRequest request){
+	DAOdb db = null;
+	String error = null;
+	String fn = request.getParameter("firstname");
+	String ln = request.getParameter("lastname");
+	String un = request.getParameter("username");
+	String pwd = request.getParameter("password");
+	String email = request.getParameter("email");
+	
+	try {
+	     db = new DAOdb();
+		    }catch (Exception e) {
+		 e.printStackTrace();
+		    }	
+	
+	if((fn!=null) && (ln!=null) && (un!=null) && (pwd!=null) && (email!=null)){
+		
+	//check for user name uniqueness	
+	if(db.isUsernameAvailable(un)){
+	
+	//add User
+    User U = new User(un,pwd);
+	db.addUser(U);
+	 
+	 //add Profile
+	Profile P = new Profile(fn,ln,email,U.getId());
+	db.addProfile(P);
+	
+	db.updateUserprofileid(U.getUsername(),P.getId());
+	
+   if (U!= null) {
+        request.getSession().setAttribute("user",U);
+       	if(P!=null){
+       	   request.getSession().setAttribute("profile", P);
+       	   if(db.storyExists(U.getUsername())){
+              List <Story> stories = db.getStoriesbyUsername(U.getUsername());
+              request.getSession().setAttribute("stories", stories);
+       	      }else{
+       	    	 json.put("storycount", "No Stories");
+       	      }
+       	      
+             
+    }
+       	json.put("redirect","main.jsp");
+   	}
+	
+	}else{
+		json.put("error", "Username already exists.Select another username");
+	}
+	
+	}else{
+		json.put("error", "One of fields on registration form is empty");
+	}
+	
+	return json.toString();
+}
+
 /*******************************************************************************************************************************************************/
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("utf-8");
+	    PrintWriter out = response.getWriter();
 		String action = request.getParameter("action");   
         if (action == null) action = "main";
         switch (action) {
             case "main": request.getRequestDispatcher("main" + ".jsp").forward(request,response); break;
-            case "createStory": request.getRequestDispatcher("storycomp" + ".jsp").forward(request,response);break;
+            case "createStory": jsontostring = getcreateStory(request);break;
             case "canvas":getcanvas(request,response);break;
+            case "getStories":getStories(request,response);break;
+            case "image": getprofileimage(request,response);break;
             case "storypdf" : storypdf(request,response);break;
-            case "login": request.getRequestDispatcher("login" + ".jsp").forward(request,response);break;
-            case "logout": logout(request,response);break;
-            case "register": request.getRequestDispatcher("register" + ".jsp").forward(request,response);break;
+            case "login": jsontostring = getlogin(request);break;
+            case "logout": jsontostring = logout(request);break;
+            case "register":jsontostring = getregister(request); break; 
             case "profile": request.getRequestDispatcher("profile" + ".jsp").forward(request,response);break;
-            case "storyid": action = getStoryDetails(request);request.getRequestDispatcher(action + ".jsp").forward(request,response);break;
+            case "storyid": jsontostring = getStoryDetails(request);break;
             default: action = "main";request.getRequestDispatcher("main" + ".jsp").forward(request,response);
         }
         
+        out.write(jsontostring);
+        
     }
 	
-	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	 request.getSession().invalidate();
-    	 request.getRequestDispatcher("login" + ".jsp").forward(request,response);
-     }
-	
-	private String getStoryDetails(HttpServletRequest request){
+
+private String getregister (HttpServletRequest request){
+	 json.put("redirect", "register.jsp");
+	 return json.toString();
+}
+
+private String getlogin (HttpServletRequest request){
+	 json.put("redirect", "login.jsp");
+	 return json.toString();
+}
+
+private String logout (HttpServletRequest request){
+	request.getSession().invalidate();
+	json.put("redirect", "login.jsp");
+	return json.toString();
+}
+
+private String getcreateStory (HttpServletRequest request){
+	json.put("redirect", "storycomp.jsp");
+	 return json.toString();
+}
+
+
+private String getStoryDetails(HttpServletRequest request){
 		Integer storyid = Integer.parseInt(request.getParameter("id"));
 		Story S = null;
-		
 		DAOdb db = null;
 	    try {
 	          db = new DAOdb();
@@ -266,10 +464,11 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 	    
 	   S = db.getStorybyStoryId(storyid);
 	   request.getSession().setAttribute("story", S);
-	   return "story";
+	   json.put("redirect", "story.jsp");
+	   return json.toString();
 	}
 	
-	private void getcanvas(HttpServletRequest request, HttpServletResponse response) {
+private void getcanvas(HttpServletRequest request, HttpServletResponse response) {
 	    	DAOdb db = null;
 	    	Story S = null;
 		    String storyid  = request.getParameter("for");
@@ -450,6 +649,117 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
         
 		return filepath;
 	}
+	
+	
+	/**
+	 *get profile image method
+	 */
+	
+	private void getprofileimage(HttpServletRequest request, HttpServletResponse response) {
+    	DAOdb db = null;
+    	Profile P =null;
+    	String profileid  = request.getParameter("for");
+        Integer pid = 0;
+      
+        try
+        {
+          if(profileid != null)
+            pid = Integer.parseInt(profileid);
+        }
+        catch (NumberFormatException e)
+        {
+        	pid = 0;
+        }
+        
+        
+	    try {
+	          db = new DAOdb();
+	        } catch (Exception e) {
+	         
+	         e.printStackTrace();
+	    }	
+	    
+	    P = db.getProfilebyProfileId(pid);
+	    byte[] profilepic = P.getProfpic();
+        if (profilepic == null) {
+            response.setStatus(404);
+            return;
+        }
+        
+        try{
+        	
+        	String filename = "" + P.getId()+P.getUserId()+"profile";
+       	    String filepath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\" + filename;
+        	String imageString = java.util.Base64.getEncoder().encodeToString(profilepic);
+        	byte[]decodedbytes = java.util.Base64.getDecoder().decode(imageString);
+           	InputStream in = new ByteArrayInputStream(decodedbytes);
+  	        BufferedImage bImageFromConvert = ImageIO.read(in);
+  	        ImageIO.write(bImageFromConvert, "png", new File(filepath+".png"));
+            BufferedImage oldbi =  ImageIO.read(new File(filepath+".png"));
+    		int type = oldbi.getType();
+  	        BufferedImage newbi = resizeImage(oldbi, type);
+  		    ImageIO.write(newbi, "png", new File(filepath+".png")); 
+  		    byte[] imageInbytes = bufferedImagetobytearray(newbi);
+  		  	response.getOutputStream().write( imageInbytes );
+  		      			
+  	       }catch (IOException e) {
+        	e.getMessage().toString();
+        }
+    }
+	
+/**
+ * Resize image function	
+ */
+
+private static BufferedImage resizeImage(BufferedImage originalImage, int type){
+		BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+		g.dispose();
+			
+		return resizedImage;
+}
+
+private static byte[] bufferedImagetobytearray(BufferedImage bi){
+	byte[] imageInByte = null;
+	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	try {
+		ImageIO.write(bi, "png", baos );
+		baos.flush();
+		imageInByte = baos.toByteArray();
+		baos.close();
+		
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		String lasterror = e.getMessage().toString();
+	}
+	
+	return imageInByte;
+}
+
+private void getStories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	
+	String un = request.getParameter("user");
+	DAOdb db = new DAOdb();
+	 try {
+         db = new DAOdb();
+       } catch (Exception e) {
+        
+        e.printStackTrace();
+       }	
+	if(db.storyExists(un)){
+        List <Story> stories = db.getStoriesbyUsername(un);
+        System.out.println(stories.get(0) );
+ 	    request.getSession().setAttribute("stories", stories);
+ 	    Gson gson = new Gson();
+ 	    String jsonStories = gson.toJson(stories);
+ 	    System.out.println("jsonStories = " + jsonStories);
+ 	    request.setAttribute("userstories", stories);
+ 	 }
+	request.getRequestDispatcher("main.jsp").forward(request, response);
+	
+}
      
   
 }

@@ -18,7 +18,14 @@
 </head>
 <body onload="newCanvas();">
 <header>
-  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+  <c:choose>
+     <c:when test="${not empty profile.profpic}">
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     </c:when>
+     <c:otherwise>
+     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     </c:otherwise>
+ </c:choose>
   <h1>My Story Board</h1>
 </header>
 	<label for="canvas"><h3>

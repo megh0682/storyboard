@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +18,15 @@
 </head>
 <body>
 <header>
-  <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
-  <h1>My Story Board</h1>
+<c:choose>
+<c:when test="${not empty profile.profpic}">
+<img src="StoryServlet?action=image&for=${profile.id}"/>
+</c:when>
+<c:otherwise>
+<img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+</c:otherwise>
+</c:choose>
+<h1>My Story Board</h1>
 </header>
 <div class="container">
      <!--     <form id="myname" role="form">

@@ -47,6 +47,15 @@ implements Serializable {
         this.email = email;
         this.userid = userid;
     }
+    
+    public Profile( String firstname, String lastname, String email,Integer userid) {
+        
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.userid = userid;
+    }
+
 
     public Integer getId() {
         return this.id;

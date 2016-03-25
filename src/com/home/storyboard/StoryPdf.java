@@ -72,8 +72,9 @@ public class StoryPdf {
 		//Add image
 		Image image1 = Image.getInstance(imagestring);
 		//if you would have a chapter indentation
+		image1.setAlignment(Image.LEFT);
 		image1.scaleAbsolute(150f, 150f);
-	    image1.setAlignment(Image.ORIGINAL_PNG);
+	   
 		document.add(image1);
 		
 		//closing the document will flush out the content to the file.No more edits possible after this.

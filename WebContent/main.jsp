@@ -34,43 +34,50 @@
 
 <div class="col-md-4" class = "form-group">
 <h1>Hello ${user.username}! </h1>
+
 <c:choose>
+
 <c:when test="${user ne null}">
 <label for="fn"> First-Name: </label><input type="text" disabled class="form-control" value = ${profile.firstname}>
 <label for="ln"> Last-Name: </label><input type="text" disabled class="form-control" value = ${profile.lastname}>
 <label for="email"> Email: </label><input type="email" disabled class="form-control"value = ${profile.email}>
-<label for="profilepic"> Profile Picture: </label><img src="http://www.w3schools.com/tags/smiley.gif" alt="Smiley face" width="42" height="42"><button id="editprofile">Change Your Picture</button>
+<label for="profilepic"> Avatar: </label>
+<c:choose>
+     <c:when test="${not empty profile.profpic}">
+     <input type="hidden" id ="hpprofileid" name="hpprofileid" class="homepage" value="${profile.id}"/>
+     <img src="#" id="hpprofileimage" name="hpprofileimage" class="homepage"/>
+     </c:when>
+     <c:otherwise>
+     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     </c:otherwise>
+ </c:choose>
+<input type="submit" id="editprofile" name="editprofile" value="Update"/>
 </div>
- <form name="myform" id="myform" method="POST" action="uploadimage" enctype="multipart/form-data" role="form" hidden="true">
-	<div class="col-md-4" class = "form-group">
-		<label for="fileinput">Upload your photo: </label>
-		<input type="file" name="file" id="file" /> 
-		<input type="submit" value="Upload" />
-	</div>
-</form>
-
 <div class="col-md-4">
 <h1>My Stories</h1>
 <ol>
 <c:forEach var="story" items="${stories}">
-  <li><a href="StoryServlet?id=${story.id}&action=storyid">${story.title}</a></li>    
+
+<li><a href="#" id="hpgetStory" name="hpgetStory" class="homepage">${story.title}</a><input type ="hidden" name="hpstoryid" id="hpstoryid" class="homepage" value="${story.id}"}/></li>    
 </c:forEach>
 </ol>
-</div>    
-         
+</div>   
 <div class="col-md-4">
-<a href="StoryServlet?action=createStory"><h1>Create a new Story!</h1></a>
+<a href="#" id ="hpcreateStory" name="createStory" class="homepage"><h1>Create a new Story!</h1></a>
 </div> 
 </div>
 </div> 
-<a href="StoryServlet?action=logout">Log Out</a>
-</p>
- </c:when>
+<a href="#" id="hplogout" name="hplogout" class="homepage">Log Out</a></p>
+
+</c:when>
+
 <c:otherwise>
- <p><a href="StoryServlet?action=login">Log in to Storyboard</a> 
- <a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
- </p>
+
+ <p><a href="#" id="hplogin" name="hplogin" class="homepage">Log in to Storyboard</a> 
+ <a href="#" id="hpregister" name="hpregister" class="homepage">I'm sold. Sign me up!</a></p>
+ 
 </c:otherwise>
+
 </c:choose>
 
 <footer> Read, Write and Share</footer>

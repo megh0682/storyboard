@@ -6,9 +6,11 @@ import java.util.List;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.StatementBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.table.TableUtils;
 import com.j256.ormlite.support.ConnectionSource;
@@ -106,6 +108,31 @@ public class DAOdb {
 		  return storyList;
 	    }
 	 
+	 public boolean storyExists(String username){
+		 String uname =username;
+		 User user = getUserbyUsername(uname);
+		 Integer uid =user.getId();
+		 boolean isStory = false;
+		 try{
+			    GenericRawResults<String[]> stories = storyDAO.queryRaw("select count(*) from stories where authorid =" + uid);
+		   	     // there should be 1 result
+				List<String[]> results = stories.getResults();
+				// the results array should have 1 value
+				String[] resultarray = results.get(0);
+				Integer storycount = Integer.parseInt(resultarray[0]);
+				// this should print the number of orders that have this account-id
+				if(storycount<=0){
+					System.out.println("No story exist for " +username);
+					isStory=false;
+				  }else{
+					  isStory=true;
+				  }
+				}catch(SQLException e){
+					lastError = e.getMessage().toString();
+				}
+		return isStory;
+	 }
+	 
 	 public void addUser(User U) {
 		 try{
 			 userDAO.create(U);
@@ -114,6 +141,17 @@ public class DAOdb {
 	        	lastError = e.getMessage().toString();
 	        }
 	    } 
+	 
+	 public void updateUserprofileid(String username, Integer profileid){
+		 try{
+         UpdateBuilder<User, Integer> updateBuilder = userDAO.updateBuilder();
+         updateBuilder.updateColumnValue(User.PROFILE_ID, profileid);
+         updateBuilder.where().eq(User.NAME_FIELD_NAME , username);
+         updateBuilder.update();
+		 }catch(Exception e){
+			 lastError = e.getMessage().toString();
+		 }
+	 }
 	 
 	 public User getUserbyUsername(String username) {
 		 // find out how many users are there with the same username
@@ -151,6 +189,73 @@ public class DAOdb {
 	        	lastError = e.getMessage().toString();
 	        }
 	    } 
+	 
+	 public Profile getProfilebyProfileId(Integer profileid){
+		 Profile profile = null;
+		 
+		 try{
+				profile = profileDAO.queryForId(profileid);
+				// there should be 1 result
+			}catch(Exception e){
+					System.out.println(e.getMessage().toString());
+					lastError = e.getMessage().toString();
+				}
+		 return profile;
+		 
+	 }
+	 
+	 
+	 public void updateProfilefn(String firstname,Integer profileid) {
+		 try{
+			 UpdateBuilder<Profile, Integer> updateBuilder = profileDAO.updateBuilder();
+			 updateBuilder.updateColumnValue(Profile.FIRSTNAME_FIELD_NAME, firstname);
+			 updateBuilder.where().eq("id",profileid);
+			 updateBuilder.update();
+	         lastError = null;
+	        } catch (Exception e) {
+	        	lastError = e.getMessage().toString();
+	        }
+		 
+	 }
+	 
+	 public void updateProfileln(String lastname,Integer profileid) {
+		 try{
+			 UpdateBuilder<Profile, Integer> updateBuilder = profileDAO.updateBuilder();
+			 updateBuilder.updateColumnValue(Profile.LASTNAME_FIELD_NAME, lastname);
+			 updateBuilder.where().eq("id",profileid);
+			 updateBuilder.update();
+	         lastError = null;
+	        } catch (Exception e) {
+	        	lastError = e.getMessage().toString();
+	        }
+		 
+	 }
+	 
+	 public void updateProfileemail(String email,Integer profileid) {
+		 try{
+			 UpdateBuilder<Profile, Integer> updateBuilder = profileDAO.updateBuilder();
+			 updateBuilder.updateColumnValue(Profile.EMAIL_FIELD_NAME, email);
+			 updateBuilder.where().eq("id",profileid);
+			 updateBuilder.update();
+	         lastError = null;
+	        } catch (Exception e) {
+	        	lastError = e.getMessage().toString();
+	        }
+		 
+	 }
+	 
+	 public void updateProfilepic(byte[]picbytes,Integer profileid) {
+		 try{
+			 UpdateBuilder<Profile, Integer> updateBuilder = profileDAO.updateBuilder();
+			 updateBuilder.updateColumnValue(Profile.PROFILEPIC_FIELD_NAME, picbytes);
+			 updateBuilder.where().eq("id",profileid);
+			 updateBuilder.update();
+	         lastError = null;
+	        } catch (Exception e) {
+	        	lastError = e.getMessage().toString();
+	        }
+		 
+	 }
 	 
 	 public Profile getProfilebyUsername(String username) {
 		 // find out how many users are there with the same username
@@ -227,5 +332,25 @@ public class DAOdb {
 	    }
 	
 	 public String getLastError() { return lastError; }
+	 
+	 public boolean isUsernameAvailable(String username){
+		 String uname = username;
+		 User user = null;
+		 boolean result = true;
+	     try{
+			long usercount= userDAO.queryRawValue("select count(*) from Users where username = ?", uname); 
+			// there should be 1 result
+			if(usercount<=0){
+				result= true;
+			  }else{	
+				result= false;
+			  }
+	      }catch(Exception e){
+	    	  lastError = e.getMessage().toString();
+	      }
+	     
+	     return result;
+		 
+	  }
 	
 }

@@ -23,10 +23,10 @@
  <div style="width: 200px; margin: 100px auto 0 auto;"> 
      <form id="myname" role="form">
 	 <div class="col-md-16" class = "form-group">
-            <label for ="myname">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="text" required class="form-control"/>
-            <label for ="mypasscode">Passcode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" required class="form-control"/><br><br>
+            <label for ="myname"></label><input type="text" placeholder="Username" required class="form-control"/><br>
+            <label for ="mypasscode"></label><input type="password" placeholder="Password" required class="form-control"/><br>
             <input type="button"  id="savename" value="Login"/><span><input type="button" value="Cancel"/></span><p id="namesuccess"></p>
-            <input type="button" id="register" value="New User Register here"/>
+            <input type="button" id="gotoregister" value="New User Register here"/>
      </div>  
 	 </form> 
 </div>
