@@ -658,30 +658,6 @@ $("#hplogin").click(function(){
 		    
 	});
 	 
-	 /*****************************************************************************************************/
-	 
-	 $("#hpcreateStory").click(function(){	
-			
-		 $.ajax({
-			  type: "GET",
-			  url: "StoryServlet",
-		      data: {"action":"createStory"},
-			  dataType: "json",
-			  success: function(json){
-				alert(json.redirect) ;
-				if (json.redirect) {
-					$("#hpcreateStory").href = json.redirect;		
-		         }else{
-		            alert(json.error);          
-		        }
-			    },
-			  error: function(){
-					  console.log("fail") ; 
-		       },
-			 
-			});
-		    
-	}); 
 
 	 /*****************************************************************************************************/
 	 $("#hpcreateStory").click(function(){	
@@ -733,18 +709,67 @@ $("#hplogin").click(function(){
 	}); 
 	 
  /*****************************************************************************************************/
-	 
-	 $("#hpgetStory").click(function(){	
-	 var sid = $("#hpstoryid").val();
+	$("img.homepage").one("load", function(){
+		 var pid = $("#hpprofileid").val();  
 		 $.ajax({
 			  type: "GET",
 			  url: "StoryServlet",
-		      data: {"action":"storyid","id":sid},
+		      data: {"action":"image","for":pid},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.filepath) ;
+				if (json.filepath) {
+					$("#hpprofileimage").attr('src',json.filepath);	
+					$("#hpprofileimageheader").attr('src',json.filepath);	
+		         }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		 
+		}).each(function() {
+		  if(this.complete) $(this).load();
+		});
+	 
+/*****************************************************************************************************/	 
+	$("img.profilepage").one("load", function(){
+		 var pid = $("#ppprofileid").val();  
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"image","for":pid},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.filepath) ;
+				if (json.filepath) {
+					$("#ppprofileimage").attr('src',json.filepath);	
+					$("#ppprofileimageheader").attr('src',json.filepath);	
+		         }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		 
+		}).each(function() {
+		  if(this.complete) $(this).load();
+		});
+	 
+/*****************************************************************************************************/	 
+	$("#pplogout").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"logout"},
 			  dataType: "json",
 			  success: function(json){
 				alert(json.redirect) ;
 				if (json.redirect) {
-					$("#hpgetStory").href = json.redirect;		
+					$("#pplogout").href = json.redirect;		
 		         }else{
 		            alert(json.error);          
 		        }
@@ -755,8 +780,352 @@ $("#hplogin").click(function(){
 			 
 			});
 		    
-	}); 			 
+	});
+
+	/*****************************************************************************************************/
+
+	$("#pplogin").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"login"},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.redirect) ;
+				if (json.redirect) {
+					$("#pplogin").href = json.redirect;		
+		         }else{
+		            alert(json.error);          
+		        }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
 			 
+			});
+		    
+	});
+/****************************************************************************************************************/
+	
+	$("#ppregister").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"register"},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.redirect) ;
+				if (json.redirect) {
+					$("#ppregister").href = json.redirect;		
+		         }else{
+		            alert(json.error);          
+		        }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
 			 
-					
+			});
+		    
+});		 
+	 
+	/*****************************************************************************************************/
+	
+	$("#pphomepage").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"main"},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.redirect) ;
+				if (json.redirect) {
+					$("#pphomepage").href = json.redirect;		
+		         }else{
+		            alert(json.error);          
+		        }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		    
+});		 
+	 
+	/*****************************************************************************************************/
+	$("#cslogout").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"logout"},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.redirect) ;
+				if (json.redirect) {
+					$("#cslogout").href = json.redirect;		
+		         }else{
+		            alert(json.error);          
+		        }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		    
+	});
+
+	/*****************************************************************************************************/
+	$("#cshomepage").click(function(){	
+		
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"main"},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.redirect) ;
+				if (json.redirect) {
+					$("#cshomepage").href = json.redirect;		
+		         }else{
+		            alert(json.error);          
+		        }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		    
+});		 
+	 
+	/*****************************************************************************************************/
+	$("img.createStory").one("load", function(){
+		 var pid = $("#csprofileid").val();  
+		 $.ajax({
+			  type: "GET",
+			  url: "StoryServlet",
+		      data: {"action":"image","for":pid},
+			  dataType: "json",
+			  success: function(json){
+				alert(json.filepath) ;
+				if (json.filepath) {
+				   $("#csprofileimageheader").attr('src',json.filepath);	
+		         }
+			    },
+			  error: function(){
+					  console.log("fail") ; 
+		       },
+			 
+			});
+		 
+		}).each(function() {
+		  if(this.complete) $(this).load();
+		});
+	 	 		  
+ /*****************************************************************************************************/
+ $("#dplogout").click(function(){	
+		
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"logout"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#pplogout").href = json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});
+
+/*****************************************************************************************************/
+$("#dphomepage").click(function(){	
+	
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"main"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#dphomepage").href= json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});		 
+ 
+/*****************************************************************************************************/
+$("img.drawpage").one("load", function(){
+	 var pid = $("#dpprofileid").val();  
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"image","for":pid},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.filepath) ;
+			if (json.filepath) {
+			   $("#dpprofileimageheader").attr('src',json.filepath);	
+	         }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	 
+	}).each(function() {
+	  if(this.complete) $(this).load();
+	});
+	 		  
+/*****************************************************************************************************/
+$("img.storypage").one("load", function(){
+	 var pid = $("#spprofileid").val();  
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"image","for":pid},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.filepath) ;
+			if (json.filepath) {
+			   $("#spprofileimageheader").attr('src',json.filepath);	
+	         }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	 
+	}).each(function() {
+	  if(this.complete) $(this).load();
+	});
+	 		  
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+$("#splogout").click(function(){	
+		
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"logout"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#splogout").href = json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});
+
+/*****************************************************************************************************/
+$("#sphomepage").click(function(){	
+	
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"main"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#sphomepage").href  = json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});		 
+
+/*****************************************************************************************************/
+
+
+$("#splogin").click(function(){	
+	
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"login"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#splogin").href = json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});
+/****************************************************************************************************************/
+
+$("#spregister").click(function(){	
+	
+	 $.ajax({
+		  type: "GET",
+		  url: "StoryServlet",
+	      data: {"action":"register"},
+		  dataType: "json",
+		  success: function(json){
+			alert(json.redirect) ;
+			if (json.redirect) {
+				$("#spregister").href = json.redirect;		
+	         }else{
+	            alert(json.error);          
+	        }
+		    },
+		  error: function(){
+				  console.log("fail") ; 
+	       },
+		 
+		});
+	    
+});		 
+ 
+/*****************************************************************************************************/
+
+
+
+
 });

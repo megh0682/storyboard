@@ -27,7 +27,8 @@
 <header>
  <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     <input type="hidden" id ="spprofileid" name="spprofileid" class="storypage" value="${profile.id}"/>
+     <img src="#" id="spprofileimageheader" name="spprofileimage" class="storypage"/>
      </c:when>
      <c:otherwise>
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
@@ -54,20 +55,17 @@
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
      </c:otherwise>
   </c:choose>
-</p>			
+</p>	
 <p><a href="StoryServlet?action=storypdf&for=${story.id}">Download as pdf</a></p>
-
 </c:when>
 <c:otherwise>
-<p><a href="StoryServlet?action=login">Log in to Storyboard</a> 
-   <a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
-</p>
+<p><a href="#" id="splogin" name="splogin" class="storypage">Log in to Storyboard</a> 
+ <a href="#" id="spregister" name="spregister" class="storypage">I'm sold. Sign me up!</a></p>
 </c:otherwise>
-
 </c:choose>
 
-<a href="StoryServlet?action=main">Homepage</a> 
-<a href="StoryServlet?action=logout">Logout</a>
+<a href="#" id="sphomepage" name="sphomepage" class="storypage">Homepage</a> |
+<a href="#" id="splogout" name="splogout" class="storypage">Log Out</a></p>
 			
 </div>
 </div>

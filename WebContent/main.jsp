@@ -20,7 +20,8 @@
 <header>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     <input type="hidden" id ="hpprofileid" name="hpprofileid" class="homepage" value="${profile.id}"/>
+     <img src="#" id="hpprofileimageheader" name="hpprofileimage" class="homepage"/>
      </c:when>
      <c:otherwise>
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
@@ -44,7 +45,6 @@
 <label for="profilepic"> Avatar: </label>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="hpprofileid" name="hpprofileid" class="homepage" value="${profile.id}"/>
      <img src="#" id="hpprofileimage" name="hpprofileimage" class="homepage"/>
      </c:when>
      <c:otherwise>

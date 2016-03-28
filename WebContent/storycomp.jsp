@@ -19,12 +19,13 @@
 <body>
 <header>
 <c:choose>
-<c:when test="${not empty profile.profpic}">
-<img src="StoryServlet?action=image&for=${profile.id}"/>
-</c:when>
-<c:otherwise>
-<img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
-</c:otherwise>
+     <c:when test="${not empty profile.profpic}">
+     <input type="hidden" id ="csprofileid" name="csprofileid" class="createStory" value="${profile.id}"/>
+     <img src="#" id="csprofileimageheader" name="csprofileimage" class="createStory"/>
+     </c:when>
+     <c:otherwise>
+     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     </c:otherwise>
 </c:choose>
 <h1>My Story Board</h1>
 </header>
@@ -77,8 +78,8 @@
      <br><br>
 
      <center><a href="#" id ="lnktosubmit"><input type="button" id="buttonCanvas" value ="Next"/></a></center>
-      <a href="StoryServlet?action=main">Homepage</a> |
-      <a href="StoryServlet?action=logout">Logout</a>
+      <a href="#" id="cshomepage" name="cshomepage" class="createStory">Homepage</a> |
+      <a href="#" id="cslogout" name="cslogout" class="createStory">Log Out</a></p>
          
 </div>
 </div>  

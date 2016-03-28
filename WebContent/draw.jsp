@@ -20,7 +20,8 @@
 <header>
   <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     <input type="hidden" id ="dpprofileid" name="dpprofileid" class="drawpage" value="${profile.id}"/>
+     <img src="#" id="dpprofileimageheader" name="dpprofileimage" class="drawpage"/>
      </c:when>
      <c:otherwise>
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
@@ -41,8 +42,8 @@
 	<input type="button" id="btndownload" value="Save and Submit" />
 	<span class="saveCanvasbutton"> <a id="lnkcanvassave" href="#"
 		onclick="saveCanvas();"><input type="button" value="Download" /></a></span><span><input type="button" id="btnclearcanvas" value="Clear Canvas" onclick="newCanvas();"/></span><br>
-	<a href="StoryServlet?action=main">Homepage</a> |
-    <a href="StoryServlet?action=logout">Logout</a>	
+    <a href="#" id="dphomepage" name="dphomepage" class="drawpage">Homepage</a> |
+    <a href="#" id="dplogout" name="dplogout" class="drawpage">Log Out</a></p>
 	<footer>Read, Write and Share</footer>
 	
 </body>

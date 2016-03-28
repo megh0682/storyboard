@@ -404,54 +404,74 @@ private String register(HttpServletRequest request){
 
 /*******************************************************************************************************************************************************/
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("utf-8");
-	    PrintWriter out = response.getWriter();
+	    
 		String action = request.getParameter("action");   
         if (action == null) action = "main";
         switch (action) {
-            case "main": request.getRequestDispatcher("main" + ".jsp").forward(request,response); break;
-            case "createStory": jsontostring = getcreateStory(request);break;
+            case "main": gethomepage(request,response);break;
+            case "createStory": getcreateStory(request,response);break;
             case "canvas":getcanvas(request,response);break;
             case "getStories":getStories(request,response);break;
             case "image": getprofileimage(request,response);break;
             case "storypdf" : storypdf(request,response);break;
-            case "login": jsontostring = getlogin(request);break;
-            case "logout": jsontostring = logout(request);break;
-            case "register":jsontostring = getregister(request); break; 
+            case "login":  getlogin(request,response);break;
+            case "logout": logout(request,response);break;
+            case "register":getregister(request,response); break; 
             case "profile": request.getRequestDispatcher("profile" + ".jsp").forward(request,response);break;
-            case "storyid": jsontostring = getStoryDetails(request);break;
+            case "storyid": getStoryDetails(request,response);break;
             default: action = "main";request.getRequestDispatcher("main" + ".jsp").forward(request,response);
         }
         
-        out.write(jsontostring);
+        
         
     }
 	
+private void gethomepage (HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException{
+	response.setContentType("application/json");
+    response.setCharacterEncoding("utf-8");
+    PrintWriter out = response.getWriter();
+	json.put("redirect", "main.jsp");
+	out.write(json.toString());
+}
 
-private String getregister (HttpServletRequest request){
+private void getregister (HttpServletRequest request,HttpServletResponse response) throws IOException{
+	 response.setContentType("application/json");
+	 response.setCharacterEncoding("utf-8");
+	 PrintWriter out = response.getWriter();
 	 json.put("redirect", "register.jsp");
-	 return json.toString();
+	 out.write(json.toString());
 }
 
-private String getlogin (HttpServletRequest request){
-	 json.put("redirect", "login.jsp");
-	 return json.toString();
+private void getlogin (HttpServletRequest request,HttpServletResponse response) throws IOException{
+	response.setContentType("application/json");
+	response.setCharacterEncoding("utf-8");
+	PrintWriter out = response.getWriter();
+	json.put("redirect", "login.jsp");
+	out.write(json.toString());	
 }
 
-private String logout (HttpServletRequest request){
+private void logout (HttpServletRequest request,HttpServletResponse response) throws IOException{
+	response.setContentType("application/json");
+	response.setCharacterEncoding("utf-8");
+	PrintWriter out = response.getWriter();
 	request.getSession().invalidate();
 	json.put("redirect", "login.jsp");
-	return json.toString();
+	out.write(json.toString());	
 }
 
-private String getcreateStory (HttpServletRequest request){
+private void getcreateStory (HttpServletRequest request,HttpServletResponse response) throws IOException{
+	response.setContentType("application/json");
+	response.setCharacterEncoding("utf-8");
+	PrintWriter out = response.getWriter();
 	json.put("redirect", "storycomp.jsp");
-	 return json.toString();
+	out.write(json.toString());	
 }
 
 
-private String getStoryDetails(HttpServletRequest request){
+private void getStoryDetails(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("utf-8");
+	    PrintWriter out = response.getWriter();
 		Integer storyid = Integer.parseInt(request.getParameter("id"));
 		Story S = null;
 		DAOdb db = null;
@@ -465,10 +485,13 @@ private String getStoryDetails(HttpServletRequest request){
 	   S = db.getStorybyStoryId(storyid);
 	   request.getSession().setAttribute("story", S);
 	   json.put("redirect", "story.jsp");
-	   return json.toString();
+	   out.write(json.toString());	
 	}
 	
-private void getcanvas(HttpServletRequest request, HttpServletResponse response) {
+private void getcanvas(HttpServletRequest request, HttpServletResponse response)throws IOException{
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("utf-8");
+	        PrintWriter out = response.getWriter();
 	    	DAOdb db = null;
 	    	Story S = null;
 		    String storyid  = request.getParameter("for");
@@ -482,6 +505,7 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
 	        catch (NumberFormatException e)
 	        {
 	        	sid = 0;
+	        	
 	        }
 	        
 	        
@@ -495,43 +519,40 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
 		    S = db.getStorybyStoryId(sid);
 		    byte[] storypic = S.getStorypic();
 	        if (storypic == null) {
-	            response.setStatus(404);
-	            return;
-	        }
-	        
-	        try{
-	        	
-	        	
-	        	/*StringBuilder sb = new StringBuilder();
+	            String image_string = "/WebContent/images/defaultstorypic.png";
+	            json.put("redirect", image_string);
+	            out.write(json.toString());
+	        }else{        
+	            StringBuilder sb = new StringBuilder();
 	        	sb.append("data:image/png;base64,");
 	        	sb.append(" ");
 	        	sb.append(java.util.Base64.getEncoder().encodeToString(storypic));
 	        	String newString = sb.toString();
 	        	System.out.println("base64encoded:" +newString);	
-	        	response.setContentType("image/png");
-	        	response.getWriter().println(newString);*/
+	        	json.put("redirect", newString);
+	        	out.write(json.toString());	
+	        	//response.setContentType("image/png");
+	        	//response.getWriter().println(newString);*/
 
 
 	        	
 	        	//byte[] imageBytes = java.util.Base64.getEncoder().encode(storypic);
-	        	String imageString = java.util.Base64.getEncoder().encodeToString(storypic);
-	        	byte[]decodedbytes = java.util.Base64.getDecoder().decode(imageString);
+	        	//String imageString = java.util.Base64.getEncoder().encodeToString(storypic);
+	        	//byte[]decodedbytes = java.util.Base64.getDecoder().decode(imageString);
 	        	// convert byte array back to BufferedImage
-				InputStream in = new ByteArrayInputStream(decodedbytes);
-				BufferedImage bImageFromConvert = ImageIO.read(in);
-				ImageIO.write(bImageFromConvert, "png", new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvasforpdf.png"));
-	        	response.setContentType("image/png");
+				//InputStream in = new ByteArrayInputStream(decodedbytes);
+				//BufferedImage bImageFromConvert = ImageIO.read(in);
+				//ImageIO.write(bImageFromConvert, "png", new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\canvasforpdf.png"));
+	        	//response.setContentType("image/png");
 	        	//response.setContentLength(decodedbytes.length);
-	        	response.getOutputStream().write(decodedbytes);
+	        	//response.getOutputStream().write(decodedbytes);
 	        	     	
 	        	
-	        } catch (IOException e) {
-	        	e.getMessage().toString();
-	        }
+	        } 
 	    }
 	
 	
-	private void storypdf(HttpServletRequest request, HttpServletResponse response) {
+private void storypdf(HttpServletRequest request, HttpServletResponse response) {
     	DAOdb db = null;
     	Story S = null;
 	    String storyid  = request.getParameter("for");
@@ -614,7 +635,8 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
     }
 	
 	
-	private String CreateCanvasImage(Integer storyid, String mimetype){
+  private String CreateCanvasImage(Integer storyid, String mimetype){
+	    
 		
 		DAOdb db = null;
     	Story S = null;
@@ -655,7 +677,10 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
 	 *get profile image method
 	 */
 	
-	private void getprofileimage(HttpServletRequest request, HttpServletResponse response) {
+private void getprofileimage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	    response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        PrintWriter out = response.getWriter();
     	DAOdb db = null;
     	Profile P =null;
     	String profileid  = request.getParameter("for");
@@ -682,8 +707,9 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
 	    P = db.getProfilebyProfileId(pid);
 	    byte[] profilepic = P.getProfpic();
         if (profilepic == null) {
-            response.setStatus(404);
-            return;
+            //response.setStatus(404);
+        	String defaultfilepath = "C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\defaultprofilepic.png";
+            json.put("filepath", defaultfilepath);
         }
         
         try{
@@ -699,12 +725,15 @@ private void getcanvas(HttpServletRequest request, HttpServletResponse response)
     		int type = oldbi.getType();
   	        BufferedImage newbi = resizeImage(oldbi, type);
   		    ImageIO.write(newbi, "png", new File(filepath+".png")); 
-  		    byte[] imageInbytes = bufferedImagetobytearray(newbi);
-  		  	response.getOutputStream().write( imageInbytes );
+  		    json.put("filepath", filepath);
+  		    //byte[] imageInbytes = bufferedImagetobytearray(newbi);
+  		  	//response.getOutputStream().write( imageInbytes );
   		      			
   	       }catch (IOException e) {
         	e.getMessage().toString();
         }
+        
+       out.write(json.toString());
     }
 	
 /**
@@ -720,6 +749,7 @@ private static BufferedImage resizeImage(BufferedImage originalImage, int type){
 		return resizedImage;
 }
 
+@SuppressWarnings("unused")
 private static byte[] bufferedImagetobytearray(BufferedImage bi){
 	byte[] imageInByte = null;
 	ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -732,7 +762,7 @@ private static byte[] bufferedImagetobytearray(BufferedImage bi){
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-		String lasterror = e.getMessage().toString();
+		
 	}
 	
 	return imageInByte;
@@ -757,7 +787,7 @@ private void getStories(HttpServletRequest request, HttpServletResponse response
  	    System.out.println("jsonStories = " + jsonStories);
  	    request.setAttribute("userstories", stories);
  	 }
-	request.getRequestDispatcher("main.jsp").forward(request, response);
+	//out.write(json.toString());
 	
 }
      

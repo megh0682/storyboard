@@ -20,7 +20,8 @@
 <header>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     <input type="hidden" id ="ppprofileid" name="ppprofileid" class="profilepage" value="${profile.id}"/>
+     <img src="#" id="ppprofileimageheader" name="ppprofileimage" class="profilepage"/>
      </c:when>
      <c:otherwise>
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
@@ -34,25 +35,25 @@
 <h1>Hello ${user.username}! </h1>
 <c:choose>
 <c:when test="${user ne null}">
-<label for="fn"> First-Name: </label><input type="text" class="form-control" name="fn" value = ${profile.firstname}>
-<label for="ln"> Last-Name: </label><input type="text" class="form-control" name="ln"  value = ${profile.lastname}>
-<label for="email"> Email: </label><input type="email" class="form-control" name="email" value = ${profile.email}>
+<label for="fn"> First-Name: </label><input type="text" class="form-control" name="fn" value = "${profile.firstname}"/>
+<label for="ln"> Last-Name: </label><input type="text" class="form-control" name="ln"  value = "${profile.lastname}"/>
+<label for="email"> Email: </label><input type="email" class="form-control" name="email" value = "${profile.email}"/>
 <input type ="hidden" id="profileid" class="form-control" name="profileid" value="${profile.id}"/>
 <br><input  type="submit" value="Submit" id="submitform" /><br><br>
 </c:when>
 <c:otherwise>
-<p><a href="StoryServlet?action=login">Log in to Storyboard</a> 
-<a href="StoryServlet?action=register">I'm sold. Sign me up!</a>
+<p><a href="#" id="pplogin" name="pplogin" class="profilepage">Log in to Storyboard</a> 
+<a href="#" id="ppregister" name="ppregister" class="profilepage">I'm sold. Sign me up!</a></p>
 </p>
 </c:otherwise>
 </c:choose>
-<a href="StoryServlet?action=main">Homepage</a> |
-<a href="StoryServlet?action=logout">Logout</a>
+<a href="#" id="pphomepage" name="pphomepage" class="profilepage">Homepage</a> |
+<a href="#" id="pplogout" name="pplogout" class="profilepage">Log Out</a></p>
 </div>
 <div class="col-md-6" class = "form-group"><br><br><br><br>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="StoryServlet?action=image&for=${profile.id}"/>
+     <img src="#" id="ppprofileimage" name="ppprofileimage" class="profilepage"/>
      </c:when>
      <c:otherwise>
      <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
