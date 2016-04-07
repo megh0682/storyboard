@@ -67,13 +67,13 @@
 		var start = function(e) {
 			ctx.beginPath();
 			x = e.changedTouches[0].pageX;
-			y = e.changedTouches[0].pageY;
+			y = e.changedTouches[0].pageY ;
 			ctx.moveTo(x,y);
 		};
 		var move = function(e) {
 			e.preventDefault();
 			x = e.changedTouches[0].pageX;
-			y = e.changedTouches[0].pageY;
+			y = e.changedTouches[0].pageY ;
 			ctx.lineTo(x,y);
 			ctx.stroke();
 		};
@@ -89,14 +89,14 @@
 	        e = e.originalEvent;
 			ctx.beginPath();
 			x = e.pageX;
-			y = e.pageY;
+			y = e.pageY ;
 			ctx.moveTo(x,y);
 		};
 		var move = function(e) {
 			e.preventDefault();
 	        e = e.originalEvent;
 			x = e.pageX;
-			y = e.pageY;
+			y = e.pageY ;
 			ctx.lineTo(x,y);
 			ctx.stroke();
 	    };
@@ -163,7 +163,7 @@
 	
 	
 	
-		/***************************************************************************************************************/
+   /***************************************************************************************************************/
     function saveCanvas(){
     	var imageURL=document.getElementById("canvas").toDataURL();
     	document.getElementById("lnkcanvassave").href=imageURL;

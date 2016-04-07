@@ -20,11 +20,10 @@
 <header>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="hpprofileid" name="hpprofileid" class="homepage" value="${profile.id}"/>
-     <img src="#" id="hpprofileimageheader" name="hpprofileimage" class="homepage"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
  </c:choose>
 <h1>My Story Board</h1>
@@ -45,10 +44,10 @@
 <label for="profilepic"> Avatar: </label>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="#" id="hpprofileimage" name="hpprofileimage" class="homepage"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
  </c:choose>
 <input type="submit" id="editprofile" name="editprofile" value="Update"/>
@@ -58,7 +57,7 @@
 <ol>
 <c:forEach var="story" items="${stories}">
 
-<li><a href="#" id="hpgetStory" name="hpgetStory" class="homepage">${story.title}</a><input type ="hidden" name="hpstoryid" id="hpstoryid" class="homepage" value="${story.id}"}/></li>    
+<li class="homepage"><a href="#" id="hpgetStory" name="hpgetStory" class="homepage">${story.title}</a><input type ="hidden" name="hpstoryid" id="hpstoryid" class="homepage" value="${story.id}"}/></li>    
 </c:forEach>
 </ol>
 </div>   

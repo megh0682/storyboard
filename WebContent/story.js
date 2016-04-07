@@ -4,7 +4,7 @@
  $(document).ready(function(){
 	 
 
-
+	 $.ajaxSetup({'cache':true});
 /**
  * Author: Megha Iyer
  * Function: Update profile button click event on homepage.jsp page opens a profile.jsp page
@@ -22,40 +22,30 @@ $("#editprofile").click(function(){
  * Author: Megha Iyer
  * Function: Upload profile picture on the server profile.jsp page
  */
-$("#uploadpic").click(function(){
-	var action = $("#action").val();
-	var profileid = $("#profilepicid").val();
+$("#uploadpic").click(function(e){
+	e.preventDefault();
 	var fd = new FormData(document.querySelector("form"));
-	//fd.append("action", action);
-	//fd.append("profileid",profileid);
-   $.ajax({
+	$.ajax({
 	  type: "POST",
 	  url: "StoryServlet",
       data: fd,
-	  dataType: "json",
-	  success: function(json){
-		alert(json.profilepicurl) ;
-		if (json.profilepicurl) {
-      		$("#picsucess").text("Uploaded sucessfully");
-	        $("#picsucess").fadeIn();
-	        $("#picsucess").fadeOut(10000);
-			window.location.href = json.profilepicurl;
-		
-               
-        }else{
-        // data.form contains the HTML for the replacement form
-        alert(json.error);
-          	$("#fadein").text(json.error);
-            $("#fadein").fadeIn();
-            $("#fadein").fadeOut(10000);
-            
-        }
-	    },
-	  error: function(){
-			  console.log("fail") ; 
-       },
-	 
-	});
+	  processData: false,
+      contentType: false,
+	  success: function(data){
+		  $("#picsucess").text(data.filename + " " + "uploaded sucessfully!");
+	      $("#picsucess").fadeIn();
+	      $("#picsucess").fadeOut(10000);
+	  }	 
+	}).done(function(data) {
+	   //done block
+	}).fail(function(jqXHR, textStatus) {
+        $("#fadein").text('File upload failed ...');
+        $("#fadein").fadeIn();
+        $("#fadein").fadeOut(10000);
+    }).complete(function(jqXHR, textStatus) {
+    	location.reload();
+       
+    });   
     
 });
 
@@ -83,7 +73,7 @@ $("#submitform").click(function(){
 		
 		if (json.profileurl) {
         // data.redirect contains the string URL to redirect to
-		alert("Sucessfully updated the profile!") ;
+		//alert("Sucessfully updated the profile!") ;
         $("input[name=fn]").val(fn);
         $("input[name=ln]").val(ln);
         $("input[name=email]").val(email);
@@ -123,13 +113,13 @@ $("#submitform").click(function(){
 		  data: {name:name, password:password},
 		  dataType: "json",
 		  success: function(json){
-			alert("Success")  
+			//alert("Success")  
 			if (json.redirect) {
             // data.redirect contains the string URL to redirect to
             window.location.href = json.redirect;
             }else{
             // data.form contains the HTML for the replacement form
-            alert(json.error);
+           // alert(json.error);
             $("#myname input[type=text]").val("");	
             }
            
@@ -388,7 +378,7 @@ $("#submitform").click(function(){
 					            window.location.href = json.redirect;
 					            }else{
 					            // data.form contains the HTML for the replacement form
-					            alert(json.error);
+					            //alert(json.error);
 					            $("#formTitle textarea").val(formTitle);	
 					            $("#formbgn textarea").val(formbgn);	
 					            $("#formmiddle textarea").val(formmiddle);	
@@ -432,11 +422,11 @@ if($ (".error").length){
  var emailReg = /(.+)@(.+){2,}\.(.+){2,}/;
  var usernameReg = /^[A-Za-z0-9_]+$/;
  
- alert ("fn" + nameReg.test(firstname));
- alert ("ln" + nameReg.test(lastname));
- alert ("pwd" + passwordReg.test(password));
- alert ("un" + usernameReg.test(username));
- alert ("email" + emailReg.test(email));
+ //alert ("fn" + nameReg.test(firstname));
+ //alert ("ln" + nameReg.test(lastname));
+ //alert ("pwd" + passwordReg.test(password));
+ //alert ("un" + usernameReg.test(username));
+ //alert ("email" + emailReg.test(email));
  
  var inputVal = new Array(firstname, lastname, password, email, username);
  var inputMessage = new Array("firstname", "lastname", "password", "email", "username");
@@ -506,7 +496,7 @@ $("#registerform input[value=Register]").click(function(){
             window.location.href = json.redirect;
             }else{
             // data.form contains the HTML for the replacement form
-            alert(json.error);
+            //alert(json.error);
             }
            
 			},
@@ -542,11 +532,11 @@ $("#gotoregister").click(function(){
 		      data: {"action":"register"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
 					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		           // alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -567,11 +557,11 @@ $("#reglogin").click(function(){
 	      data: {"action":"login"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#reglogin").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	            //alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -592,11 +582,11 @@ $("#hplogout").click(function(){
 	      data: {"action":"logout"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#hplogout").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	          //  alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -617,11 +607,11 @@ $("#hplogin").click(function(){
 	      data: {"action":"login"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#hplogin").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	            //alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -643,11 +633,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"register"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#hpregister").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		            //alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -668,11 +658,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"createStory"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#hpcreateStory").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		            //alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -684,32 +674,41 @@ $("#hplogin").click(function(){
 	}); 
 					
 	 /*****************************************************************************************************/
-	 
-	 $("#hpgetStory").click(function(){	
-	 var sid = $("#hpstoryid").val();
-		 $.ajax({
-			  type: "GET",
-			  url: "StoryServlet",
-		      data: {"action":"storyid","id":sid},
-			  dataType: "json",
-			  success: function(json){
-				alert(json.redirect) ;
-				if (json.redirect) {
-					$("#hpgetStory").href = json.redirect;		
-		         }else{
-		            alert(json.error);          
-		        }
-			    },
-			  error: function(){
-					  console.log("fail") ; 
-		       },
+	 $("li.homepage").each(function (){
+		 $(this).click(function(){
+		  var link = $(this).text();
+		  //alert(link);
+		  var sid = $(this).children("#hpstoryid").val();
+				 // alert(sid);
+				  $.ajax({
+					  type: "GET",
+					  url: "StoryServlet",
+				      data: {"action":"storyid","id":sid},
+					  dataType: "json",
+					  success: function(json){
+						//alert(json.redirect) ;
+						if (json.redirect) {
+							$(this).children("#hpgetStory").attr("href", json.redirect);
+							//alert($(this).children("#hpgetStory").attr("href"));
+							window.location.href = json.redirect;	
+							
+						}else{
+				            //alert(json.error);          
+				        }
+					    },
+					  error: function(){
+							  console.log("fail") ; 
+				       },
+					 
+					});
+				  
+			  });
 			 
-			});
-		    
-	}); 
-	 
+		  });	  
+	
+	
  /*****************************************************************************************************/
-	$("img.homepage").one("load", function(){
+/*	$("img.homepage").one("load", function(){
 		 var pid = $("#hpprofileid").val();  
 		 $.ajax({
 			  type: "GET",
@@ -732,31 +731,9 @@ $("#hplogin").click(function(){
 		}).each(function() {
 		  if(this.complete) $(this).load();
 		});
+*/
 	 
-/*****************************************************************************************************/	 
-	$("img.profilepage").one("load", function(){
-		 var pid = $("#ppprofileid").val();  
-		 $.ajax({
-			  type: "GET",
-			  url: "StoryServlet",
-		      data: {"action":"image","for":pid},
-			  dataType: "json",
-			  success: function(json){
-				alert(json.filepath) ;
-				if (json.filepath) {
-					$("#ppprofileimage").attr('src',json.filepath);	
-					$("#ppprofileimageheader").attr('src',json.filepath);	
-		         }
-			    },
-			  error: function(){
-					  console.log("fail") ; 
-		       },
-			 
-			});
-		 
-		}).each(function() {
-		  if(this.complete) $(this).load();
-		});
+
 	 
 /*****************************************************************************************************/	 
 	$("#pplogout").click(function(){	
@@ -767,11 +744,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"logout"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#pplogout").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		            //alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -792,11 +769,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"login"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#pplogin").href = json.redirect;		
+					window.location.href= json.redirect;		
 		         }else{
-		            alert(json.error);          
+		            //alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -816,11 +793,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"register"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#ppregister").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		          //  alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -841,11 +818,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"main"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#pphomepage").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		          //  alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -865,11 +842,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"logout"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#cslogout").href = json.redirect;		
+					window.location.href= json.redirect;		
 		         }else{
-		            alert(json.error);          
+		            //alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -889,11 +866,11 @@ $("#hplogin").click(function(){
 		      data: {"action":"main"},
 			  dataType: "json",
 			  success: function(json){
-				alert(json.redirect) ;
+				//alert(json.redirect) ;
 				if (json.redirect) {
-					$("#cshomepage").href = json.redirect;		
+					window.location.href = json.redirect;		
 		         }else{
-		            alert(json.error);          
+		           // alert(json.error);          
 		        }
 			    },
 			  error: function(){
@@ -904,30 +881,7 @@ $("#hplogin").click(function(){
 		    
 });		 
 	 
-	/*****************************************************************************************************/
-	$("img.createStory").one("load", function(){
-		 var pid = $("#csprofileid").val();  
-		 $.ajax({
-			  type: "GET",
-			  url: "StoryServlet",
-		      data: {"action":"image","for":pid},
-			  dataType: "json",
-			  success: function(json){
-				alert(json.filepath) ;
-				if (json.filepath) {
-				   $("#csprofileimageheader").attr('src',json.filepath);	
-		         }
-			    },
-			  error: function(){
-					  console.log("fail") ; 
-		       },
-			 
-			});
-		 
-		}).each(function() {
-		  if(this.complete) $(this).load();
-		});
-	 	 		  
+
  /*****************************************************************************************************/
  $("#dplogout").click(function(){	
 		
@@ -937,11 +891,11 @@ $("#hplogin").click(function(){
 	      data: {"action":"logout"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#pplogout").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	            //alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -961,11 +915,11 @@ $("#dphomepage").click(function(){
 	      data: {"action":"main"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+		//	alert(json.redirect) ;
 			if (json.redirect) {
-				$("#dphomepage").href= json.redirect;		
+				window.location.href= json.redirect;		
 	         }else{
-	            alert(json.error);          
+	        //    alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -985,7 +939,7 @@ $("img.drawpage").one("load", function(){
 	      data: {"action":"image","for":pid},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.filepath) ;
+			//alert(json.filepath) ;
 			if (json.filepath) {
 			   $("#dpprofileimageheader").attr('src',json.filepath);	
 	         }
@@ -1000,31 +954,7 @@ $("img.drawpage").one("load", function(){
 	  if(this.complete) $(this).load();
 	});
 	 		  
-/*****************************************************************************************************/
-$("img.storypage").one("load", function(){
-	 var pid = $("#spprofileid").val();  
-	 $.ajax({
-		  type: "GET",
-		  url: "StoryServlet",
-	      data: {"action":"image","for":pid},
-		  dataType: "json",
-		  success: function(json){
-			alert(json.filepath) ;
-			if (json.filepath) {
-			   $("#spprofileimageheader").attr('src',json.filepath);	
-	         }
-		    },
-		  error: function(){
-				  console.log("fail") ; 
-	       },
-		 
-		});
-	 
-	}).each(function() {
-	  if(this.complete) $(this).load();
-	});
-	 		  
-/*****************************************************************************************************/
+
 /*****************************************************************************************************/
 $("#splogout").click(function(){	
 		
@@ -1034,11 +964,11 @@ $("#splogout").click(function(){
 	      data: {"action":"logout"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#splogout").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	         //   alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -1058,11 +988,11 @@ $("#sphomepage").click(function(){
 	      data: {"action":"main"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#sphomepage").href  = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	           // alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -1084,11 +1014,11 @@ $("#splogin").click(function(){
 	      data: {"action":"login"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#splogin").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	        //    alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -1108,11 +1038,11 @@ $("#spregister").click(function(){
 	      data: {"action":"register"},
 		  dataType: "json",
 		  success: function(json){
-			alert(json.redirect) ;
+			//alert(json.redirect) ;
 			if (json.redirect) {
-				$("#spregister").href = json.redirect;		
+				window.location.href = json.redirect;		
 	         }else{
-	            alert(json.error);          
+	            //alert(json.error);          
 	        }
 		    },
 		  error: function(){
@@ -1124,6 +1054,46 @@ $("#spregister").click(function(){
 });		 
  
 /*****************************************************************************************************/
+$("img.profilepicture").each(function (){	
+	//e.preventDefault();
+	//var imgContainer = $('#imgContainer');
+	var profileid = $("#profileid").val();
+    var action = "image";
+    var self =$(this);
+    getprofileimage(profileid, action,self);
+    
+});
+
+
+
+
+function getprofileimage( profileid,  action,  self){
+	
+   
+    $.ajax({
+  	  type: "GET",
+  	  url: "StoryServlet",
+      data: {'action' :action, 'for':profileid ,'timestamp' : new Date().getTime() },
+  	  processData: false,
+      contentType: false,
+      success: function(data){
+    	 self.attr('src',data.base64String);
+    	 self.attr('title','profilepic');
+         }
+    })	  .done(function() {
+    	  //alert("done");
+    	  
+    	  })
+    	  .fail(function() {
+    	//    alert( "error" );
+    	  })
+    	  .always(function() {
+    	//    alert( "complete" );
+    	  });
+    
+    
+    
+}
 
 
 

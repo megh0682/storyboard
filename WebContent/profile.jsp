@@ -20,13 +20,13 @@
 <header>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="ppprofileid" name="ppprofileid" class="profilepage" value="${profile.id}"/>
-     <img src="#" id="ppprofileimageheader" name="ppprofileimage" class="profilepage"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
-</c:choose>
+ </c:choose>
+<!--  <img class ="profilepicture" id = "pphid" src ="#"/>-->
 <h1>Edit Your Profile</h1>
 </header>
 <div class="container">
@@ -53,19 +53,24 @@
 <div class="col-md-6" class = "form-group"><br><br><br><br>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <img src="#" id="ppprofileimage" name="ppprofileimage" class="profilepage"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
-</c:choose>
+ </c:choose>
+<!--img class ="profilepicture" id = "ppbid" src ="#"/-->
+<input type ="hidden" name="profileid" id="profileid" value="${profile.id}"/>
 <form action="StoryServlet" method="post" enctype="multipart/form-data">
     <input type="text" name="description" />
     <input type="hidden" id="action" name="action" value="editprofilepic"/>
-    <input type ="hidden" id="profilepicid" name="profilepicid" value="${profile.id}"/><div id="picsucess" style="display:none;color:green; font-size: 5px;"></div>
+    <input type ="hidden" id="profilepicid" name="profilepicid" value="${profile.id}"/>
     <input type="file" name="file" id="fileupload" /><div id="fadein" style="display:none;color:red font-size: 5px;"></div>
     <input type="submit" id="uploadpic" value="Upload" />
+    
 </form>
+<div id="picsucess" style="display:none;color:green; font-size: 15px;"></div>
+<div id="imgContainer"></div>
 </div>
      
 </div>

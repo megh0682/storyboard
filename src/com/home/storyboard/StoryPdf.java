@@ -33,12 +33,12 @@ public class StoryPdf {
 	public void createPdf(String filename, String imagestring ){
 		
  try {
-		File oldfile = new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\temp.pdf");
+		File oldfile = new File(filename);
 		if(oldfile.exists() && oldfile.isFile()) {
 			oldfile.delete();
 		}
 		
-		File newfile = new File("C:\\Users\\megha iyer\\git\\storyboard\\WebContent\\images\\temp.pdf");
+		File newfile = new File(filename);
 		FileOutputStream fileout = new FileOutputStream(newfile);
 		Document document = new Document();
 		Phrase phrase = new Phrase();

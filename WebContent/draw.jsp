@@ -17,31 +17,16 @@
 <title>Draw on Canvas</title>
 </head>
 <body onload="newCanvas();">
-<header>
-  <c:choose>
-     <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="dpprofileid" name="dpprofileid" class="drawpage" value="${profile.id}"/>
-     <img src="#" id="dpprofileimageheader" name="dpprofileimage" class="drawpage"/>
-     </c:when>
-     <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
-     </c:otherwise>
- </c:choose>
-  <h1>My Story Board</h1>
-</header>
-	<label for="canvas"><h3>
-			<i>Describe your story on a Canvas:</i>
-		</h3></label>
-	<br>
-	<canvas id="canvas" width="1100" height="400"
+
+	<canvas id="canvas" width="1300" height="500" title="Draw your story on canvas"
 		style="border: 2px solid grey; cursor: crosshair; background-color: #fff;"></canvas>
 	<br>
 	<br>
-	StoryID:${story.id}
+	
 	<input type="hidden" id ="hiddenstoryid" value= "${story.id}" />
 	<input type="button" id="btndownload" value="Save and Submit" />
 	<span class="saveCanvasbutton"> <a id="lnkcanvassave" href="#"
-		onclick="saveCanvas();"><input type="button" value="Download" /></a></span><span><input type="button" id="btnclearcanvas" value="Clear Canvas" onclick="newCanvas();"/></span><br>
+		onclick="saveCanvas();"><input type="button" value="Download" /></a></span><span><input type="button" id="btnclearcanvas" value="Clear Canvas" onclick="newCanvas();"/></span><br><br>
     <a href="#" id="dphomepage" name="dphomepage" class="drawpage">Homepage</a> |
     <a href="#" id="dplogout" name="dplogout" class="drawpage">Log Out</a></p>
 	<footer>Read, Write and Share</footer>

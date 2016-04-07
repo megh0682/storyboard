@@ -27,11 +27,10 @@
 <header>
  <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="spprofileid" name="spprofileid" class="storypage" value="${profile.id}"/>
-     <img src="#" id="spprofileimageheader" name="spprofileimage" class="storypage"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
  </c:choose>
   <h1>My Story Board</h1>
@@ -52,7 +51,7 @@
      <img src="StoryServlet?action=canvas&for=${story.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=canvas&for=${story.id}"/>
      </c:otherwise>
   </c:choose>
 </p>	

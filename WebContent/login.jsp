@@ -13,10 +13,7 @@
 </head>
 <body>
 <div class = "page-header">
-
-   <h1 align ="center"><b> Sign in to your Storyboard </b> </h1>
-   <h2 id = "flash">${flash}</h2>
-   
+<h1 align ="center"><b> Sign in to your Storyboard </b> </h1>
 </div>
 <div class="container">
 <div class="row">

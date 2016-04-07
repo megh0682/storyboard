@@ -20,13 +20,12 @@
 <header>
 <c:choose>
      <c:when test="${not empty profile.profpic}">
-     <input type="hidden" id ="csprofileid" name="csprofileid" class="createStory" value="${profile.id}"/>
-     <img src="#" id="csprofileimageheader" name="csprofileimage" class="createStory"/>
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:when>
      <c:otherwise>
-     <img src="http://www.w3schools.com/tags/smiley.gif" alt="mypic" />
+     <img src="StoryServlet?action=image&for=${profile.id}"/>
      </c:otherwise>
-</c:choose>
+ </c:choose>
 <h1>My Story Board</h1>
 </header>
 <div class="container">
