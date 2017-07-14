@@ -1,5 +1,9 @@
 # storyboard
+
 ## A J2EE web application using sqlite as DB, ORMlite as ORM, jquery,bootstrap CSS and HTML5.
+
+###
+Demo @ http://ec2-52-10-113-248.us-west-2.compute.amazonaws.com/
 
 ### Use Cases
 
